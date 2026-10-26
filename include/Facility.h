@@ -14,12 +14,13 @@ public:
     std::string getFacilityID();
     std::string getFacilityName();
     std::string getFacilityBuilding();
-    std::string getFacilityCatergory();
+    std::string getFacilityCategory();
 
     void setFacilityID(std::string id);
     void setFacilityName(std::string name);
     void setFacilityBuilding(std::string building);
     void setFacilityCategory(std::string category);
+
     //Display Facility Information to the console
     void DisplayFacilityInfo();
 private:
@@ -27,7 +28,7 @@ private:
     std::string facilityID;
     std::string facilityName;
     std::string facilityBuilding;
-    std::string facilityCategory   ;
+    std::string facilityCategory;
 };
 
 #endif 
