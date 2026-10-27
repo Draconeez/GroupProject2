@@ -17,7 +17,7 @@ bool campusGraph::loadFromFile(const std::string& filename) {
 	}
 
 	std::string line;
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip line one, the header
 	while (std::getline(file, line)) {
 		std::istringstream iss(line);
 		std::string src, dest;

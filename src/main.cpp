@@ -64,6 +64,7 @@ void departmentsLoad() {
 // Opening facilities data
 void facilitiesLoad(std::vector<Facility>& facilities) {
 	std::ifstream file("data/facilities.txt");
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip line one, header
 	if (!file.is_open()) {
 		std::cerr << "Error opening facilities.txt" << std::endl;
 		return;
