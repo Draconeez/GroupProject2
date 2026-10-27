@@ -6,7 +6,7 @@
 #include "../include/HashTable.h"
 #include "../include/DepartmentTree.h"
 #include "../include/Facility.h"
-#include "../include/CampusGraph.h" ? 
+#include "../include/CampusGraph.h"		
 
 // Opening buildings data 
 void buildingsLoad() {
@@ -64,6 +64,7 @@ void departmentsLoad() {
 // Opening facilities data
 void facilitiesLoad(std::vector<Facility>& facilities) {
 	std::ifstream file("data/facilities.txt");
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip line one, header
 	if (!file.is_open()) {
 		std::cerr << "Error opening facilities.txt" << std::endl;
 		return;
@@ -91,10 +92,6 @@ void facilitiesLoad(std::vector<Facility>& facilities) {
 }
 
 int main() {
-	buildingsLoad();
-	connectionsLoad();
-	departmentsLoad();
-
 	//Load resources from file
 	std::vector<Facility> Facility;
 	facilitiesLoad(Facility);
@@ -127,6 +124,16 @@ int main() {
 			break;
 		case 3:
 			// View campus graph - Will's Job
+		{
+			campusGraph graph(false); // Create an undirected graph
+
+			if (graph.loadFromFile("data/connections.txt")) {
+				graph.displayGraph();
+			}
+			else {
+				std::cerr << "Error loading graph from file." << std::endl;
+			}
+		}
 			break;
 		case 4:
 			// Display graph counts and degrees
