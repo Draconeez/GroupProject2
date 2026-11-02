@@ -7,22 +7,22 @@ class Facility {
 public:
     //Constructors
     Facility();
-    Facility(std::string id, std::string name, std::string building, std::string category);
+    Facility(const std::string& id, const std::string& name, const std::string& building, const std::string& category);
     
     //Getters and Setters
    
-    std::string getFacilityID();
-    std::string getFacilityName();
-    std::string getFacilityBuilding();
-    std::string getFacilityCategory();
+    std::string getFacilityID() const;
+    std::string getFacilityName() const;
+    std::string getFacilityBuilding() const;
+    std::string getFacilityCategory() const;
 
-    void setFacilityID(std::string id);
-    void setFacilityName(std::string name);
-    void setFacilityBuilding(std::string building);
-    void setFacilityCategory(std::string category);
+    void setFacilityID(const std::string& id);
+    void setFacilityName(const std::string& name);
+    void setFacilityBuilding(const std::string& building);
+    void setFacilityCategory(const std::string& category);
 
     //Display Facility Information to the console
-    void DisplayFacilityInfo();
+    void DisplayFacilityInfo() const;
 private:
     //Types
     std::string facilityID;
