@@ -45,3 +45,31 @@ void campusGraph::displayGraph() const {
 const std::unordered_map<std::string, std::vector<std::string>>& campusGraph::getAdjList() const {
 	return adjList;
 }
+
+// BFS searching for reachable buildings
+
+void BFS()
+{
+	// Implement BFS algorithm here
+};
+
+
+
+// Display Counts and Degrees of each vertex(building)!! ! 
+
+void campusGraph::displayCAD() const 
+{
+	std::cout << " ====== Counts and Degrees ====== " << std::endl;
+
+	// count - how many vertexs/buildings there are total
+	size_t totalVertices = adjList.size();
+	std::cout << "Total amount of buildings: " << totalVertices << std::endl;
+	std::cout << "-------------------------------------------" << std::endl;
+
+	// degrees - how many edges/connections there are between all the buildings 
+
+	for (const auto& pair : adjList) {
+		std::cout << " - " << pair.first << " is connected to " << pair.second.size() << " other building(s). " << std::endl;
+	};
+	std::cout << "-------------------------------------------" << std::endl;
+};

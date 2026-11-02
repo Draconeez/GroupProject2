@@ -23,6 +23,13 @@ public:
 	void displayGraph() const;
 
 	const std::unordered_map<std::string, std::vector<std::string>>& getAdjList() const;
+
+	// BFS
+	void BFS();
+
+	// Counts and degrees
+	void displayCAD() const;
+
 };
 
 #endif 
