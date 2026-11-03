@@ -41,6 +41,8 @@ public:
     int getEntryCount() const { return entryCount; }
     int getCollisionCount() const { return collisionCount; }
     const std::vector<Facility>& getFacilitiesInOrder() const { return fileOrderFacilities; }
+    // Loads facilities from a file into the hash table, validating and normalizing data
+    void loadFromFile(const std::string& filepath, const std::vector<std::string>& acceptedBuildings);
 private:
     HashNode** table;
     int capacity;
@@ -52,7 +54,7 @@ private:
 
     // Stores the first accepted spelling of each category 
     std::vector<std::string> canonCategories;
-
+    
     // Computes bucket index for a given normalized ID
     int hashFunction(const std::string& normalizedId) const;
 

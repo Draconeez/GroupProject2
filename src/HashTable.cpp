@@ -116,7 +116,112 @@ bool HashTable::isCommentOrBlank(const std::string& line) {
     }
     return false;
 }
+void HashTable::loadFromFile(const std::string& filepath,
+                             const std::vector<std::string>& acceptedBuildings) {
+    // Get just the file name (e.g., "facilities.txt") for printing messages
+    std::string displayFilename = "facilities.txt";
+    for (int i = (int)filepath.length() - 1; i >= 0; i--) {
+        if (filepath[i] == '/' || filepath[i] == '\\') {
+            displayFilename = filepath.substr(i + 1);
+            break;
+        }
+    }
 
+    std::ifstream inFile(filepath);
+    if (!inFile.is_open()) {
+        std::cout << "Error: Could not open " << displayFilename
+                  << ". Treating file as empty.\n";
+        std::cout << displayFilename << ": 0 accepted, 0 rejected "
+                  << "(hash capacity " << capacity
+                  << ", entries " << entryCount
+                  << ", collisions " << collisionCount << ")\n";
+        return;
+    }
+
+    int accepted = 0;
+    int rejected = 0;
+    int lineNumber = 0;
+    std::string line;
+
+    while (std::getline(inFile, line)) {
+        lineNumber++;
+
+        if (isCommentOrBlank(line)) {
+            continue;
+        }
+
+        std::vector<std::string> fields = splitPipeLine(line);
+
+        // Check 1: Must have 4 fields (ID | Name | Building | Category)
+        if (fields.size() != 4) {
+            std::cout << "Warning [" << displayFilename << ":" << lineNumber
+                      << "]: Wrong field count (expected 4, got "
+                      << fields.size() << ").\n";
+            rejected++;
+            continue;
+        }
+
+        std::string rawId = fields[0];
+        std::string name = fields[1];
+        std::string rawBuilding = fields[2];
+        std::string rawCategory = fields[3];
+
+        // Check 2: None of the 4 fields can be empty
+        if (rawId.empty() || name.empty() || rawBuilding.empty() || rawCategory.empty()) {
+            std::cout << "Warning [" << displayFilename << ":" << lineNumber
+                      << "]: Empty required field.\n";
+            rejected++;
+            continue;
+        }
+
+        // Check 3: ID must be 'F' followed by 3 digits
+        std::string normId = normalizeId(rawId);
+        if (!isValidIdFormat(normId)) {
+            std::cout << "Warning [" << displayFilename << ":" << lineNumber
+                      << "]: Invalid facility ID format '" << normId
+                      << "' (expected F followed by 3 digits).\n";
+            rejected++;
+            continue;
+        }
+
+        // Check 4: Building must match a building from buildings.txt (ignoring case)
+        std::string canonicalBuilding = "";
+        std::string targetBuildingLower = toLower(rawBuilding);
+
+        for (int i = 0; i < (int)acceptedBuildings.size(); i++) {
+            if (toLower(acceptedBuildings[i]) == targetBuildingLower) {
+                canonicalBuilding = acceptedBuildings[i];
+                break;
+            }
+        }
+
+        if (canonicalBuilding.empty()) {
+            std::cout << "Warning [" << displayFilename << ":" << lineNumber
+                      << "]: Unknown building reference '" << rawBuilding << "'.\n";
+            rejected++;
+            continue;
+        }
+
+        // Check 5: Insert into hash table (fails if ID is a duplicate)
+        Facility candidate(normId, name, canonicalBuilding, rawCategory);
+        if (!insert(candidate)) {
+            std::cout << "Warning [" << displayFilename << ":" << lineNumber
+                      << "]: Duplicate facility ID '" << normId << "'.\n";
+            rejected++;
+            continue;
+        }
+
+        accepted++;
+    }
+
+    inFile.close();
+
+    // Print required load summary (LOAD-4, HASH-7)
+    std::cout << displayFilename << ": " << accepted << " accepted, "
+              << rejected << " rejected (hash capacity " << capacity
+              << ", entries " << entryCount
+              << ", collisions " << collisionCount << ")\n";
+}
 // Custom hash function that turns an ID string into a bucket index 
 int HashTable::hashFunction(const std::string& normalizedId) const {
     int hashValue = 0;
