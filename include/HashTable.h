@@ -29,9 +29,6 @@ public:
     bool insert(const Facility& facility);
     const Facility* searchById(const std::string& rawOrNormalizedId) const;
 
-    // M1 File Loader with building cross-reference validation (LOAD-1..5, Section 5.4)
-    void loadFromFile(const std::string& filepath,
-                      const std::vector<std::string>& acceptedBuildings);
 
     // View all facilities 
     void displayAll() const;
