@@ -6,7 +6,7 @@
 #include "../include/HashTable.h"
 #include "../include/DepartmentTree.h"
 #include "../include/Facility.h"
-#include "../include/CampusGraph.h" ? 
+#include "../include/CampusGraph.h"		
 
 // Opening buildings data 
 void buildingsLoad() {
@@ -62,18 +62,24 @@ void departmentsLoad() {
 }
 
 // Opening facilities data
-void facilitiesLoad(HashTable& facilityTable,
-                    const std::vector<std::string>& acceptedBuildings,
-                    const std::string& filepath = "data/facilities.txt") {
-    std::ifstream file(filepath);
-    if (!file.is_open()) {
-        std::cout << "Error: Could not open facilities.txt. Treating file as empty.\n";
-        std::cout << "facilities.txt: 0 accepted, 0 rejected (hash capacity "
-                  << facilityTable.getCapacity() << ", entries "
-                  << facilityTable.getEntryCount() << ", collisions "
-                  << facilityTable.getCollisionCount() << ")\n";
-        return;
-    }
+void facilitiesLoad(std::vector<Facility>& facilities) {
+	std::ifstream file("data/facilities.txt");
+	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip line one, header
+	if (!file.is_open()) {
+		std::cerr << "Error opening facilities.txt" << std::endl;
+		return;
+	}
+	std::string line;
+	int linenumber = 0;
+	while (std::getline(file, line)) {
+		if (!line.empty() && line.back() == '\r')
+		{
+			line.pop_back(); 
+		}
+		linenumber++;
+		int pos1 = line.find('|');
+		int pos2 = line.find('|', pos1 + 1);
+		int pos3 = line.find('|', pos2 + 1);
 
     std::string line;
     int linenumber = 0;
@@ -161,10 +167,6 @@ void facilitiesLoad(HashTable& facilityTable,
 }
 
 int main() {
-	buildingsLoad();
-	connectionsLoad();
-	departmentsLoad();
-
 	//Load resources from file
 	HashTable facilityTable;
 	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
@@ -196,6 +198,16 @@ int main() {
 			break;
 		case 3:
 			// View campus graph - Will's Job
+		{
+			campusGraph graph(false); // Create an undirected graph
+
+			if (graph.loadFromFile("data/connections.txt")) {
+				graph.displayGraph();
+			}
+			else {
+				std::cerr << "Error loading graph from file." << std::endl;
+			}
+		}
 			break;
 		case 4:
 			// Display graph counts and degrees
