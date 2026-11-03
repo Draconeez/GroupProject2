@@ -62,9 +62,7 @@ void departmentsLoad() {
 }
 
 // Opening facilities data
-void facilitiesLoad(HashTable& facilityTable,
-                    const std::vector<std::string>& acceptedBuildings,
-                    const std::string& dataDir) {
+void facilitiesLoad(HashTable& facilityTable, const std::vector<std::string>& acceptedBuildings, const std::string& dataDir) {
     facilityTable.loadFromFile(dataDir + "/facilities.txt", acceptedBuildings);
 }
 
@@ -92,12 +90,23 @@ int main() {
 
 		switch (caseNumber)
 		{
+		// Display all facilities
 		case 1:
 			facilityTable.displayAll();
 			break;
+		// Search facility by ID
 		case 2:
-			// Search facility by ID 
-			break;
+		{
+			std::cout << "Enter facility ID: ";
+            std::string rawId;
+            std::getline(std::cin, rawId);
+            if (HashTable::trim(rawId).empty()) {
+                std::cout << "Error: Facility ID cannot be blank.";
+            } else {
+                facilityTable.searchAndPrintById(rawId);
+            }
+            break;
+		}
 		case 3:
 			// View campus graph - Will's Job
 		{
