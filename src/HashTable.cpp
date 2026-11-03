@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-// Initializes an empty separate-chaining hash table with the given capacity (HASH-5)
+// Initializes an empty separate-chaining hash table with the given capacity 
 HashTable::HashTable(int initialCapacity) {
     if (initialCapacity > 0) {
         capacity = initialCapacity;
@@ -21,7 +21,7 @@ HashTable::HashTable(int initialCapacity) {
     }
 }
 
-// Frees all dynamically allocated HashNodes and the bucket array (NFR-11)
+// Frees all dynamically allocated HashNodes and the bucket array 
 HashTable::~HashTable() {
     for (int i = 0; i < capacity; ++i) {
         HashNode* current = table[i];
@@ -34,7 +34,7 @@ HashTable::~HashTable() {
     delete[] table;
 }
 
-// Trims leading and trailing spaces, tabs, carriage returns (\r), and newlines (Section 4.1)
+//Trims leading and trailing spaces, tabs, carriage returns, and newlines 
 std::string HashTable::trim(const std::string& str) {
     const std::string whitespace = " \t\r\n";
     size_t first = str.find_first_not_of(whitespace);
@@ -45,7 +45,7 @@ std::string HashTable::trim(const std::string& str) {
     return str.substr(first, last - first + 1);
 }
 
-// Converts all ASCII letters in a string to uppercase
+//Converts all ASCII letters in a string to uppercase
 std::string HashTable::toUpper(const std::string& str) {
     std::string result = str;
     for (size_t i = 0; i < result.length(); ++i) {
@@ -54,7 +54,7 @@ std::string HashTable::toUpper(const std::string& str) {
     return result;
 }
 
-// Converts all ASCII letters in a string to lowercase
+//Converts all ASCII letters in a string to lowercase
 std::string HashTable::toLower(const std::string& str) {
     std::string result = str;
     for (size_t i = 0; i < result.length(); ++i) {
@@ -63,12 +63,12 @@ std::string HashTable::toLower(const std::string& str) {
     return result;
 }
 
-// Trims outer whitespace and converts a facility ID to uppercase (Section 4.1, HASH-4)
+//Trims outer whitespace and converts a facility ID to uppercase 
 std::string HashTable::normalizeId(const std::string& rawId) {
     return toUpper(trim(rawId));
 }
 
-// Checks that a normalized ID is 'F' followed by exactly 3 ASCII digits (Section 4.1)
+// Checks that a normalized ID is 'F' followed by exactly 3 ASCII digits 
 bool HashTable::isValidIdFormat(const std::string& normalizedId) {
     if (normalizedId.length() != 4) {
         return false;
@@ -86,7 +86,7 @@ bool HashTable::isValidIdFormat(const std::string& normalizedId) {
     return true;
 }
 
-// Splits a line into separate fields wherever there is a '|' character (Section 5.1)
+// Splits a line into separate fields wherever there is a '|' character 
 std::vector<std::string> HashTable::splitPipeLine(const std::string& line) {
     std::vector<std::string> fields;
     std::string currentField = "";
@@ -105,7 +105,7 @@ std::vector<std::string> HashTable::splitPipeLine(const std::string& line) {
     return fields;
 }
 
-// Returns true if a line is blank or starts with '#' (Section 4.1)
+// Returns true if a line is blank or starts with '#'
 bool HashTable::isCommentOrBlank(const std::string& line) {
     std::string cleaned = trim(line);
     if (cleaned.empty()) {
@@ -117,7 +117,7 @@ bool HashTable::isCommentOrBlank(const std::string& line) {
     return false;
 }
 
-// Custom hash function that turns an ID string into a bucket index (HASH-2)
+// Custom hash function that turns an ID string into a bucket index 
 int HashTable::hashFunction(const std::string& normalizedId) const {
     int hashValue = 0;
 
@@ -132,7 +132,7 @@ int HashTable::hashFunction(const std::string& normalizedId) const {
     return hashValue;
 }
 
-// Keeps the spelling of the first accepted record for each category (Section 4.1)
+//Keeps the spelling of the first accepted record for each category 
 std::string HashTable::resolveCategorySpelling(const std::string& rawCategory) {
     std::string trimmedCat = trim(rawCategory);
     std::string lowerCat = toLower(trimmedCat);
@@ -147,7 +147,7 @@ std::string HashTable::resolveCategorySpelling(const std::string& rawCategory) {
     return trimmedCat;
 }
 
-// Inserts a Facility into the hash table; rejects duplicates (HASH-1..4, HASH-7)
+//Inserts a Facility into the hash table; rejects duplicates
 bool HashTable::insert(const Facility& facility) {
     std::string normId = normalizeId(facility.getFacilityID());
     if (!isValidIdFormat(normId)) {
@@ -158,16 +158,17 @@ bool HashTable::insert(const Facility& facility) {
     HashNode* current = table[index];
     HashNode* tail = nullptr;
 
-    // Walk the linked list at this bucket to check for a duplicate ID
+    //Walk the linked list at this bucket to check for a duplicate ID
     while (current != nullptr) {
         if (current->data.getFacilityID() == normId) {
-            return false; // Duplicate found; reject without counting a collision
+            return false; 
+        
         }
         tail = current;
         current = current->next;
     }
 
-    // If the bucket already had at least one node, count a collision (HASH-7)
+    // If the bucket already had at least one node, count a collision 
     if (table[index] != nullptr) {
         collisionCount++;
     }
@@ -191,7 +192,7 @@ bool HashTable::insert(const Facility& facility) {
     return true;
 }
 
-// Looks up a facility by ID in the hash table (HASH-6, FAC-3)
+// Looks up a facility by ID in the hash table
 const Facility* HashTable::searchById(const std::string& rawOrNormalizedId) const {
     std::string normId = normalizeId(rawOrNormalizedId);
     if (!isValidIdFormat(normId)) {
