@@ -12,7 +12,7 @@ Facility::Facility(const std::string& id, const std::string& name, const std::st
     facilityID  = id;
     facilityName = name;
     facilityBuilding = building;
-    facilityCategory   = category ;
+    facilityCategory   = category;
 };
 
 // getters

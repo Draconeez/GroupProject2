@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-// Initializes an empty separate-chaining hash table with the given capacity 
+//Initializes an empty separate-chaining hash table with the given capacity 
 HashTable::HashTable(int initialCapacity) {
     if (initialCapacity > 0) {
         capacity = initialCapacity;
@@ -21,7 +21,7 @@ HashTable::HashTable(int initialCapacity) {
     }
 }
 
-// Frees all dynamically allocated HashNodes and the bucket array 
+//Frees all dynamically allocated HashNodes and the bucket array
 HashTable::~HashTable() {
     for (int i = 0; i < capacity; ++i) {
         HashNode* current = table[i];
