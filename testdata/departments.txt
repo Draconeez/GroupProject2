@@ -1,0 +1,14 @@
+# DepartmentName|ParentName
+University|NONE
+College of Engineering|University
+College of Science|University
+Computer Science|College of Engineering
+Electrical Engineering|College of Engineering
+Mathematics|College of Science
+Physics|College of Science
+
+# Rejections: case-insensitive duplicate, unknown parent, empty field, and wrong field count
+computer science|College of Engineering
+Nursing|Medical School
+|University
+Biology|College of Science|ExtraField
