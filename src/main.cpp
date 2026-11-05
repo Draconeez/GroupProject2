@@ -8,26 +8,59 @@
 #include "../include/Facility.h"
 #include "../include/CampusGraph.h"		
 
-// Opening buildings data 
-void buildingsLoad() {
-	std::ifstream file("data/buildings.txt");
+// Opening buildings data and loading into acceptedBuildings vector
+void buildingsLoad(const std::string& dataDir, std::vector<std::string>& acceptedBuildings) {
+	std::ifstream file(dataDir + "/buildings.txt");
 	if (!file.is_open()) {
 		std::cerr << "Error opening buildings.txt" << std::endl;
+		std::cout << "buildings.txt: 0 accepted, 0 rejected" << std::endl;
 		return;
 	}
 	std::string line;
+	int lineNumber = 0;
+    int accepted = 0;
+    int rejected = 0;
+
 	while (std::getline(file, line)) {
-		std::istringstream iss(line);
+		lineNumber++;
+        if (HashTable::isCommentOrBlank(line)) {
+            continue;
+        }
+		std::vector<std::string> fields = HashTable::splitPipeLine(line);
+        if (fields.size() != 1 || fields[0].empty()) 
+		{
+            std::cout << "Warning [buildings.txt:" << lineNumber<< "]: Wrong field count or empty building name." << std::endl;
+            rejected++;
+            continue;
+        }
+		
 		std::string buildingName;
-		if (std::getline(iss, buildingName, ',')) {
-			// Process the building name
-		}
+		std::string bldgName = fields[0];
+        bool isDuplicate = false;
+        for (int i = 0; i < (int)acceptedBuildings.size(); i++) 
+		{
+            if (HashTable::toLower(acceptedBuildings[i]) == HashTable::toLower(bldgName)) 
+			{
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (isDuplicate) {
+            std::cout << "Warning [buildings.txt:" << lineNumber<< "]: Duplicate building '" << bldgName << "'."<<std::endl;
+            rejected++;
+            continue;
+        }
+
+        acceptedBuildings.push_back(bldgName);
+        accepted++;
 	}
 	file.close();
+	std::cout << "buildings.txt: " << accepted << " accepted, " << rejected << " rejected"<< std::endl;
 }
 // Opening connections data
-void connectionsLoad() {
-	std::ifstream file("data/connections.txt");
+void connectionsLoad(const std::string& dataDir) {
+	std::ifstream file(dataDir + "/connections.txt");
 	if (!file.is_open()) {
 		std::cerr << "Error opening connections.txt" << std::endl;
 		return;
@@ -44,8 +77,8 @@ void connectionsLoad() {
 }
 
 // Opening departments data
-void departmentsLoad() {
-	std::ifstream file("data/departments.txt");
+void departmentsLoad(const std::string& dataDir) {
+	std::ifstream file(dataDir + "/departments.txt");
 	if (!file.is_open()) {
 		std::cerr << "Error opening departments.txt" << std::endl;
 		return;
@@ -66,11 +99,17 @@ void facilitiesLoad(HashTable& facilityTable, const std::vector<std::string>& ac
     facilityTable.loadFromFile(dataDir + "/facilities.txt", acceptedBuildings);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+	std::string dataDir = "data";
+	if (argc > 1) 
+	{
+		dataDir = argv[1];
+	}
 	//Load resources from file
 	HashTable facilityTable;
 	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
-	facilitiesLoad(facilityTable, acceptedBuildings, "data");
+	buildingsLoad(dataDir, acceptedBuildings);
+	facilitiesLoad(facilityTable, acceptedBuildings, dataDir);
 
 	int caseNumber = 0;
 	while (caseNumber != 10) {
