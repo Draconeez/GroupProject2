@@ -1,42 +1,39 @@
-================================================================================
-DESIGN DOCUMENT — MILESTONE 1
+DESIGN DOCUMENT for
 Project 2: Smart Campus Navigation and Facility Analytics System
-================================================================================
 
 1. SYSTEM OVERVIEW & MAIN CLASSES / MODULES
 The program is organized into modular C++ classes separated into header files
 (include/) and implementation files (src/):
 
-- Facility (include/Facility.h, src/Facility.cpp):
-  Encapsulates a single campus facility record with four private string members:
+Facility (include/Facility.h, src/Facility.cpp):
+  -Encapsulates a single campus facility record with four private string members:
   facilityID, facilityName, facilityBuilding, and facilityCategory. Provides
   constructors, const getters, setters, and DisplayFacilityInfo() to output
   records cleanly.
 
-- HashNode & HashTable (include/HashTable.h, src/HashTable.cpp):
-  Implements the custom separate-chaining hash table keyed by normalized
+HashNode & HashTable (include/HashTable.h, src/HashTable.cpp):
+  -Implements the custom separate-chaining hash table keyed by normalized
   Facility ID. Maintains a dynamic bucket array (HashNode** table) for O(1)
   average-time ID lookups alongside a std::vector<Facility> (fileOrderFacilities)
   to preserve exact file insertion order when viewing all facilities, and a
   std::vector<std::string> (canonCategories) to preserve the spelling of the
   first accepted record for each category.
 
-- campusGraph (include/CampusGraph.h, src/CampusGraph.cpp):
-  Represents campus buildings as vertices and walkways as undirected edges using
+campusGraph (include/CampusGraph.h, src/CampusGraph.cpp):
+  -Represents campus buildings as vertices and walkways as undirected edges using
   an adjacency list representation. Supports loading connections from file,
   adding undirected edges, and displaying building adjacency lists.
 
-- DepartmentNode & DepartmentTree (include/DepartmentNode.h,
-  include/DepartmentTree.h, src/DepartmentTree.cpp):
-  Implements a general tree where each DepartmentNode stores a department name,
+DepartmentNode & DepartmentTree (include/DepartmentNode.h, include/DepartmentTree.h, src/DepartmentTree.cpp):
+  -Implements a general tree where each DepartmentNode stores a department name,
   a parent pointer, and a std::vector<DepartmentNode*> of child pointers (allowing
   any number of children). Supports file loading with validation, adding
   departments in memory, case-insensitive department search (reporting parent,
   direct-child count, and depth), indented hierarchy display, preorder
   traversal, and recursive postorder destructor cleanup (destroyTree).
 
-- Main Driver (src/main.cpp):
-  Coordinates command-line data directory selection, sequential file loading
+Main Driver (src/main.cpp):
+  -Coordinates command-line data directory selection, sequential file loading
   (buildings.txt, connections.txt, facilities.txt, departments.txt), input
   validation, and the repeating 10-option Milestone 1 user menu.
 
@@ -52,13 +49,11 @@ The hash function (HashTable::hashFunction) uses a polynomial rolling hash with
 a prime multiplier of 31 and table capacity C:
 
     hashValue = 0
-
     For each character c in normalizedId (from index 0 to 3):
-        hashValue = (hashValue * 31 + ASCII(c)) % capacity
+      hashValue = (hashValue * 31 + ASCII(c)) % capacity
 
 Expanded for a 4-character ID (c0, c1, c2, c3) with capacity C = 17:
-
-    index = (ASCII(c0)*31^3 + ASCII(c1)*31^2 + ASCII(c2)*31 + ASCII(c3)) modulo 17
+index = (ASCII(c0)*31^3 + ASCII(c1)*31^2 + ASCII(c2)*31 + ASCII(c3)) modulo 17
 
 Using a prime multiplier (31) and a prime bucket capacity (17) ensures that
 every character position contributes to the bucket index and distributes keys
@@ -94,10 +89,10 @@ places the new node).
 How Collisions are Counted:
 When insert() is called, the function first computes index = hashFunction(normId)
 and traverses the linked list at table[index] to check for duplicate IDs.
-- If a matching ID is found in the chain, the record is immediately rejected as
+-If a matching ID is found in the chain, the record is immediately rejected as
   a duplicate, the original entry is left unchanged, and collisionCount is NOT
   incremented.
-- Only after confirming the ID is unique does insert() check whether
+-Only after confirming the ID is unique does insert() check whether
   table[index] != nullptr. If the bucket is non-empty, collisionCount is
   incremented by 1, and the new node is appended to the tail of the bucket's
   chain.
