@@ -1,3 +1,6 @@
+// File: HashTable.h
+// Purpose: Declare the custom separate-chaining ID hash table and facility loader.
+// Author: Aryn
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 #include "Facility.h"

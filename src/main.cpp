@@ -129,13 +129,14 @@ int main(int argc, char* argv[]) {
 
 		switch (caseNumber)
 		{
-		// Display all facilities
 		case 1:
-			facilityTable.displayAll();
-			break;
-		// Search facility by ID
+				// Display all facilities
+				facilityTable.displayAll();
+				break;
 		case 2:
-		{
+				// Search facility by ID
+				std::cout << "Enter facility ID: ";
+			{
 			std::cout << "Enter facility ID: ";
             std::string rawId;
             std::getline(std::cin, rawId);
@@ -145,7 +146,7 @@ int main(int argc, char* argv[]) {
                 facilityTable.searchAndPrintById(rawId);
             }
             break;
-		}
+			}
 		case 3:
 			// View campus graph - Will's Job
 		{

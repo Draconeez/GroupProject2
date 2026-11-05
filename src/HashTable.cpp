@@ -1,4 +1,6 @@
-
+// File: HashTable.cpp
+// Purpose: Implements the custom separate-chaining ID hash table and facility loader.
+// Author: Aryn 
 #include "../include/HashTable.h"
 #include <cctype>
 #include <fstream>

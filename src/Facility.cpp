@@ -1,4 +1,8 @@
+//File: Facility.cpp
+//Purpose: Implements the Facility class, which represents a facility with an ID, name, building, and category.
+//Author: Aryn
 #include "../include/Facility.h"
+#include <iostream>
 //Constructors
 Facility::Facility()
 {

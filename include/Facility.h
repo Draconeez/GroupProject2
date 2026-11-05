@@ -1,8 +1,10 @@
+//File: Facility.h
+//Purpose: Declare the Facility class, which represents a facility with an ID, name, building, and category.
+//Author: Aryn
 #ifndef FACILITY_H
 #define FACILITY_H
 
 #include <string>
-#include <iostream>
 class Facility {
 public:
     //Constructors
