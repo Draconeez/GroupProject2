@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
 		{
 			campusGraph graph(false); // Create an undirected graph
 
-			if (graph.loadFromFile("data/connections.txt")) {
+			if (graph.loadFromFile(dataDir + "/connections.txt")) {
 				graph.displayGraph();
 			}
 			else {
