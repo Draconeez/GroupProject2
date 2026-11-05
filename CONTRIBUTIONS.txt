@@ -1,0 +1,12 @@
+Contributions
+
+
+Member A- Created Test Data4r
+Facility Class (header file shared with Will)
+Hashtable Class (Separate Chaining)
+Hash function, collision counting, dupe ID rejection
+File loading, testing, validation, warning reporting
+Menu Option 1 and 2
+Member B-
+
+Member C-
