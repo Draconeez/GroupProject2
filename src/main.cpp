@@ -212,16 +212,16 @@ while (true) {
 }
 			break;
 		case 6:
-			// Add department
+			// Add department addDepartment(const string& name, const string& parentName);
 			break;
 		case 7:
-			// Search department 
+			// Search department searchDepartment(const string& targetName);
 			break;
 		case 8:
-			// Display department hierarchy
+			// Display department hierarchy displayHierarchy();
 			break;
 		case 9:
-			// Run preorder traversal
+			// Run preorder traversal displayPreorder();
 			break;
 		case 10:
 			// Exit
