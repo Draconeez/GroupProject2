@@ -108,8 +108,6 @@ int main(int argc, char* argv[]) {
 				facilityTable.displayAll();
 				break;
 		case 2:
-				// Search facility by ID
-				std::cout << "Enter facility ID: ";
 			{
 			std::cout << "Enter facility ID: ";
             std::string rawId;
