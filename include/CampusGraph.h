@@ -9,7 +9,7 @@
 #include <string>
 #include <queue>
 #include <unordered_set>
-
+#include <algorithm>
 class campusGraph {
 
 private:
