@@ -6,6 +6,9 @@
 #include <unordered_map>
 #include <fstream>		
 #include <sstream>
+#include <string>
+#include <queue>
+#include <unordered_set>
 
 class campusGraph {
 
@@ -25,7 +28,7 @@ public:
 	const std::unordered_map<std::string, std::vector<std::string>>& getAdjList() const;
 
 	// BFS
-	void BFS();
+	void BFS(const std::string& startNode, const std::string& endNode);
 
 	// Counts and degrees
 	void displayCAD() const;
