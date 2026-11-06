@@ -1,3 +1,6 @@
+//File: CampusGraph.cpp
+//Purpose: Implements the campusGraph class - loads connections.txt, gathers the edges to create a graph, displays connections using an adjacency list. BFS uses connections for the shortest route. DisplayCAD for the degrees of each building.  
+//Author: Will
 #include "CampusGraph.h"
 #include <iostream>
 #include <limits>
