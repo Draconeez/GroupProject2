@@ -1,4 +1,8 @@
-#include "Facility.h"
+//File: Facility.cpp
+//Purpose: Implements the Facility class, which represents a facility with an ID, name, building, and category.
+//Author: Aryn
+#include "../include/Facility.h"
+#include <iostream>
 //Constructors
 Facility::Facility()
 {
@@ -7,36 +11,36 @@ Facility::Facility()
     facilityBuilding = "";
     facilityCategory   = "";
 };
-Facility::Facility(std::string id, std::string name, std::string building, std::string category)
+Facility::Facility(const std::string& id, const std::string& name, const std::string& building, const std::string& category)
 {
     facilityID  = id;
     facilityName = name;
     facilityBuilding = building;
-    facilityCategory   = category ;
+    facilityCategory   = category;
 };
 
 // getters
-std::string Facility::getFacilityID()
+std::string Facility::getFacilityID() const
 { return facilityID; }
-std::string Facility::getFacilityName()
+std::string Facility::getFacilityName() const
 { return facilityName; }
-std::string Facility::getFacilityBuilding()
+std::string Facility::getFacilityBuilding() const
 { return facilityBuilding; }
-std::string Facility::getFacilityCategory()
+std::string Facility::getFacilityCategory() const
 { return facilityCategory; }
 
 // setters
-void Facility::setFacilityID(std::string id)
+void Facility::setFacilityID(const std::string& id)
 { facilityID = id; }
-void Facility::setFacilityName(std::string name)
+void Facility::setFacilityName(const std::string& name)
 { facilityName = name; }
-void Facility::setFacilityBuilding(std::string building)
+void Facility::setFacilityBuilding(const std::string& building)
 { facilityBuilding = building; }
-void Facility::setFacilityCategory(std::string category)
+void Facility::setFacilityCategory(const std::string& category)
 { facilityCategory = category; }
 
 // Display Facility info 
-void Facility::DisplayFacilityInfo()
+void Facility::DisplayFacilityInfo() const
 {
 	std::cout << "Facility ID: " << facilityID << std::endl;
 	std::cout << "Facility Name: " << facilityName << std::endl;

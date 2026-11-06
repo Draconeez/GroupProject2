@@ -1,0 +1,13 @@
+# BuildingName 
+Library
+Student Union
+
+Science Building
+Engineering Building
+Business Building
+Gym
+Observatory
+
+# Case-insensitive duplicate and wrong field count 
+library
+Music Hall|Annex
