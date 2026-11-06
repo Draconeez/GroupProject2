@@ -58,40 +58,11 @@ void buildingsLoad(const std::string& dataDir, std::vector<std::string>& accepte
 	file.close();
 	std::cout << "buildings.txt: " << accepted << " accepted, " << rejected << " rejected"<< std::endl;
 }
-// Opening connections data
-void connectionsLoad(const std::string& dataDir) {
-	std::ifstream file(dataDir + "/connections.txt");
-	if (!file.is_open()) {
-		std::cerr << "Error opening connections.txt" << std::endl;
-		return;
-	}
-	std::string line;
-	while (std::getline(file, line)) {
-		std::istringstream iss(line);
-		std::string connections;
-		if (std::getline(iss, connections, ',')) {
-			// Process the connections
-		}
-	}
-	file.close();
-}
 
 // Opening departments data
-void departmentsLoad(const std::string& dataDir) {
-	std::ifstream file(dataDir + "/departments.txt");
-	if (!file.is_open()) {
-		std::cerr << "Error opening departments.txt" << std::endl;
-		return;
-	}
-	std::string line;
-	while (std::getline(file, line)) {
-		std::istringstream iss(line);
-		std::string departmentName;
-		if (std::getline(iss, departmentName, ',')) {
-			// Process the department name
-		}
-	}
-	file.close();
+void departmentsLoad(DepartmentTree& deptTree, const std::string& dataDir) 
+{
+	deptTree.loadFromFile(dataDir + "/departments.txt");
 }
 
 // Opening facilities data
@@ -106,11 +77,14 @@ int main(int argc, char* argv[]) {
 		dataDir = argv[1];
 	}
 	//Load resources from file
-	HashTable facilityTable;
+	HashTable facilityTable; // Load the facilities data from the file
+	DepartmentTree deptTree; // Load the department hierarchy from the file
 	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
 	buildingsLoad(dataDir, acceptedBuildings);
 	facilitiesLoad(facilityTable, acceptedBuildings, dataDir);
-
+	departmentsLoad(deptTree, dataDir);
+	// Campus graph and other data structures are now loaded and ready for use
+	// Connections was loaded elsewhere
 	int caseNumber = 0;
 	while (caseNumber != 10) {
 		std::cout << "===== Welcome to the Campus Navigation and Facility Analytics System! =====" << std::endl;
@@ -212,16 +186,41 @@ while (true) {
 }
 			break;
 		case 6:
-			// Add department addDepartment(const string& name, const string& parentName);
+			{
+			// Add department
+			std::string deptName;
+			std::cout << "Enter department name: ";
+			std::getline(std::cin, deptName);
+
+			if (deptTree.isEmpty()) {
+				deptTree.addDepartment(deptName, "NONE");
+			} else {
+				std::string parentName;
+				std::cout << "Enter parent department name: ";
+				std::getline(std::cin, parentName);
+				deptTree.addDepartment(deptName, parentName);
+			}
 			break;
+		}
 		case 7:
-			// Search department searchDepartment(const string& targetName);
+		{
+			std::cout << "Enter department name to search: ";
+			std::string targetDept;
+			std::getline(std::cin, targetDept);
+			if (targetDept.empty()) {
+				std::cout << "Error: Department name cannot be blank." << std::endl;
+			} else {
+				deptTree.searchDepartment(targetDept);
+			}
 			break;
+		}
+	
 		case 8:
-			// Display department hierarchy displayHierarchy();
+			deptTree.displayHierarchy();
 			break;
 		case 9:
-			// Run preorder traversal displayPreorder();
+		deptTree.displayPreorder();
+		
 			break;
 		case 10:
 			// Exit
