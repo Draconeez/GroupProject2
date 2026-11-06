@@ -8,26 +8,59 @@
 #include "../include/Facility.h"
 #include "../include/CampusGraph.h"		
 
-// Opening buildings data 
-void buildingsLoad() {
-	std::ifstream file("data/buildings.txt");
+// Opening buildings data and loading into acceptedBuildings vector
+void buildingsLoad(const std::string& dataDir, std::vector<std::string>& acceptedBuildings) {
+	std::ifstream file(dataDir + "/buildings.txt");
 	if (!file.is_open()) {
 		std::cerr << "Error opening buildings.txt" << std::endl;
+		std::cout << "buildings.txt: 0 accepted, 0 rejected" << std::endl;
 		return;
 	}
 	std::string line;
+	int lineNumber = 0;
+    int accepted = 0;
+    int rejected = 0;
+
 	while (std::getline(file, line)) {
-		std::istringstream iss(line);
+		lineNumber++;
+        if (HashTable::isCommentOrBlank(line)) {
+            continue;
+        }
+		std::vector<std::string> fields = HashTable::splitPipeLine(line);
+        if (fields.size() != 1 || fields[0].empty()) 
+		{
+            std::cout << "Warning [buildings.txt:" << lineNumber<< "]: Wrong field count or empty building name." << std::endl;
+            rejected++;
+            continue;
+        }
+		
 		std::string buildingName;
-		if (std::getline(iss, buildingName, ',')) {
-			// Process the building name
-		}
+		std::string bldgName = fields[0];
+        bool isDuplicate = false;
+        for (int i = 0; i < (int)acceptedBuildings.size(); i++) 
+		{
+            if (HashTable::toLower(acceptedBuildings[i]) == HashTable::toLower(bldgName)) 
+			{
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (isDuplicate) {
+            std::cout << "Warning [buildings.txt:" << lineNumber<< "]: Duplicate building '" << bldgName << "'."<<std::endl;
+            rejected++;
+            continue;
+        }
+
+        acceptedBuildings.push_back(bldgName);
+        accepted++;
 	}
 	file.close();
+	std::cout << "buildings.txt: " << accepted << " accepted, " << rejected << " rejected"<< std::endl;
 }
 // Opening connections data
-void connectionsLoad() {
-	std::ifstream file("data/connections.txt");
+void connectionsLoad(const std::string& dataDir) {
+	std::ifstream file(dataDir + "/connections.txt");
 	if (!file.is_open()) {
 		std::cerr << "Error opening connections.txt" << std::endl;
 		return;
@@ -44,8 +77,8 @@ void connectionsLoad() {
 }
 
 // Opening departments data
-void departmentsLoad() {
-	std::ifstream file("data/departments.txt");
+void departmentsLoad(const std::string& dataDir) {
+	std::ifstream file(dataDir + "/departments.txt");
 	if (!file.is_open()) {
 		std::cerr << "Error opening departments.txt" << std::endl;
 		return;
@@ -62,39 +95,21 @@ void departmentsLoad() {
 }
 
 // Opening facilities data
-void facilitiesLoad(std::vector<Facility>& facilities) {
-	std::ifstream file("data/facilities.txt");
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip line one, header
-	if (!file.is_open()) {
-		std::cerr << "Error opening facilities.txt" << std::endl;
-		return;
-	}
-	std::string line;
-	int linenumber = 0;
-	while (std::getline(file, line)) {
-		if (!line.empty() && line.back() == '\r')
-		{
-			line.pop_back(); 
-		}
-		linenumber++;
-		int pos1 = line.find('|');
-		int pos2 = line.find('|', pos1 + 1);
-		int pos3 = line.find('|', pos2 + 1);
-
-		std::string id = line.substr(0, pos1);
-		std::string name = line.substr(pos1 + 1, pos2 - pos1 - 1);
-		std::string building = line.substr(pos2 + 1, pos3 - pos2 - 1);
-		std::string category = line.substr(pos3 + 1);
-		facilities.push_back(Facility(id, name, building, category));
-
-	}
-	file.close();
+void facilitiesLoad(HashTable& facilityTable, const std::vector<std::string>& acceptedBuildings, const std::string& dataDir) {
+    facilityTable.loadFromFile(dataDir + "/facilities.txt", acceptedBuildings);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+	std::string dataDir = "data";
+	if (argc > 1) 
+	{
+		dataDir = argv[1];
+	}
 	//Load resources from file
-	std::vector<Facility> Facility;
-	facilitiesLoad(Facility);
+	HashTable facilityTable;
+	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
+	buildingsLoad(dataDir, acceptedBuildings);
+	facilitiesLoad(facilityTable, acceptedBuildings, dataDir);
 
 	int caseNumber = 0;
 	while (caseNumber != 10) {
@@ -115,19 +130,29 @@ int main() {
 		switch (caseNumber)
 		{
 		case 1:
-			for (size_t i = 0; i < Facility.size(); i++) {
-				Facility[i].DisplayFacilityInfo();
-			}
-			break;
+				// Display all facilities
+				facilityTable.displayAll();
+				break;
 		case 2:
-			// Search facility by ID 
-			break;
+				// Search facility by ID
+				std::cout << "Enter facility ID: ";
+			{
+			std::cout << "Enter facility ID: ";
+            std::string rawId;
+            std::getline(std::cin, rawId);
+            if (HashTable::trim(rawId).empty()) {
+                std::cout << "Error: Facility ID cannot be blank.";
+            } else {
+                facilityTable.searchAndPrintById(rawId);
+            }
+            break;
+			}
 		case 3:
 			// View campus graph - Will's Job
 		{
 			campusGraph graph(false); // Create an undirected graph
 
-			if (graph.loadFromFile("data/connections.txt")) {
+			if (graph.loadFromFile(dataDir + "/connections.txt")) {
 				graph.displayGraph();
 			}
 			else {

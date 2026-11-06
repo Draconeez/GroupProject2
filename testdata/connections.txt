@@ -1,0 +1,13 @@
+# BuildingA|BuildingB
+Library|Student Union
+Library|Business Building
+Student Union|Science Building
+Student Union|Gym
+Science Building|Engineering Building
+Business Building|Gym
+
+# Rejections: unknown building, exact duplicate, reversed duplicate, and wrong field count
+Library|Space Station
+Library|Student Union
+Student Union|Library
+Library|Gym|Observatory

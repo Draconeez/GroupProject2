@@ -1,0 +1,33 @@
+# FacilityID|FacilityName|BuildingName|Category
+F001|Main Reading Room|Library|Library
+F002|Tutoring Center|Library|Tutoring Center
+F003|Student Services Office|Student Union|Student Services Office
+F004|Computer Lab A|Science Building|Computer Lab
+F005|Room 101|Engineering Building|Classroom
+F006|Computer Lab B|Engineering Building|Computer Lab
+F007|Room 101|Business Building|Classroom
+F008|Fitness Center|Gym|Recreation
+F009|Room 205|Science Building|Classroom
+F010|Research Help Desk|Library|Library
+
+# Valid collision records (F014 collides with F001 in bucket 11; f015 -> F015 collides with F002 in bucket 12)
+  F014 | Quiet Study Room #5 | library | Study Space  
+f015|Grad Computer Lab|science building|computer lab
+
+# Reject 1: Case-insensitive duplicate ID (must NOT increment collisionCount)
+f001|Duplicate Reading Room|Library|Library
+
+# Reject 2: Too few fields (only 3s)
+F020|Broken Facility|Library
+
+# Reject 3: Too many fields (5 fields)
+F021|Extra Field Room|Library|Classroom|Extra
+
+# Reject 4: Empty required field (missing category)
+F022|Empty Category Room|Library|   
+
+# Reject 5: Invalid ID format (not F + 3 digits)
+F12|Bad ID Room|Library|Classroom
+
+# Reject 6: Unknown building reference (not in buildings.txt)
+F023|Mystery Lab|Space Station|Computer Lab
