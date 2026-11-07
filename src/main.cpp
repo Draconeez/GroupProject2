@@ -99,8 +99,14 @@ int main(int argc, char* argv[]) {
 			<< " 8. Display department hierarchy\n"
 			<< " 9. Run preorder traversal\n"
 			<< " 10. Exit\n";
-		std::cin >> caseNumber;
-
+		//Special handling for invalid input
+		if (!(std::cin >> caseNumber)) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "Invalid option. Please try again." << std::endl;
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the rest of the line after reading the case number
 		switch (caseNumber)
 		{
 		case 1:
