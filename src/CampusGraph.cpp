@@ -10,11 +10,14 @@ campusGraph::campusGraph(bool directed) : isDirected(directed) {}
 bool campusGraph::loadFromFile(const std::string& filename) {
 	std::ifstream file(filename);
 	if (!file.is_open()) {
+		std::cerr << "Error opening " << filename << std::endl; // added error message for clarity
 		return false;
 	}
 
 	std::string line;
-	file.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // skip line one, the header
+	std::string dummyHeader;
+	std::getline(file, dummyHeader); // file.ignore() causing issues -- dummy header preffered to skip line one 
+
 	while (std::getline(file, line)) {
 		std::istringstream iss(line);
 		std::string src, dest;
@@ -25,6 +28,7 @@ bool campusGraph::loadFromFile(const std::string& filename) {
 	file.close();
 	return true;
 }	
+
 void campusGraph::addEdge(const std::string& src, const std::string& dest) {
 	adjList[src].push_back(dest);
 	if (!isDirected) {
