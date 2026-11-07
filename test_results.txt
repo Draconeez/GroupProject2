@@ -1,0 +1,71 @@
+=== Member C (Ujjwol KC) - DepartmentTree Test Results ===
+
+1. File Loading & Validation (Startup)
+- Input File: data/departments.txt
+- Actual Output:
+  data/departments.txt: 7 accepted, 0 rejected
+- Result: PASS (Validates delimiter parsing and initial tree construction)
+
+2. Display Initial Department Hierarchy (Menu Option 8)
+- Input: 8
+- Actual Output:
+  University
+      College of Engineering
+          Computer Science
+          Electrical Engineering
+      College of Science
+          Mathematics
+          Physics
+- Result: PASS (Correctly indents parent-child relationships across depths 0, 1, and 2)
+
+3. Preorder Traversal (Menu Option 9)
+- Input: 9
+- Actual Output:
+  University
+  College of Engineering
+  Computer Science
+  Electrical Engineering
+  College of Science
+  Mathematics
+  Physics
+- Result: PASS (Visits root node first, followed recursively by subtrees)
+
+4. Case-Insensitive Search - Existing Department (Menu Option 7)
+- Input: 7 -> cOmPuTeR sCiEnCe
+- Actual Output:
+  Department Name: Computer Science
+  Parent: College of Engineering
+  Direct Children: 0
+  Depth: 2
+- Result: PASS (Successfully normalizes case and locates node)
+
+5. Search - Non-Existent Department Edge Case (Menu Option 7)
+- Input: 7 -> Astronomy
+- Actual Output:
+  Department 'Astronomy' not found.
+- Result: PASS (Handles missing department safely without crashing)
+
+6. Add Department - Valid Insertion (Menu Option 6)
+- Input: 6 -> Department: Cybersecurity | Parent: Computer Science
+- Follow-up Verification (Menu Option 8):
+  University
+      College of Engineering
+          Computer Science
+              Cybersecurity
+          Electrical Engineering
+      College of Science
+          Mathematics
+          Physics
+- Result: PASS (Dynamically links new child node under existing parent at Depth 3)
+
+7. Add Department - Case-Insensitive Duplicate Edge Case (Menu Option 6)
+- Input: 6 -> Department: cybersecurity | Parent: College of Engineering
+- Actual Output:
+  Error: Department 'cybersecurity' already exists.
+- Result: PASS (Rejects duplicate department name regardless of capitalization)
+
+8. Add Department - Non-Existent Parent Edge Case (Menu Option 6)
+- Input: 6 -> Department: Robotics | Parent: School of Medicine
+- Actual Output:
+  Error: Parent department 'School of Medicine' not found.
+- Result: PASS (Rejects insertion when specified parent node does not exist)
