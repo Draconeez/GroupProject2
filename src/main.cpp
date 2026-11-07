@@ -155,16 +155,21 @@ int main(int argc, char* argv[]) {
 
 while (true) {
 
-	buildingsLoad(dataDir, acceptedBuildings); // list buildings for user
-	for (const auto& building : acceptedBuildings) {
-		std::cout << building << std::endl;
-	}
+	
+	std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
+	std::cout << "Available buildings: " << std::endl;
+	std::cout << "-------------------------------------------" << std::endl;
 
+	for (const auto& building : acceptedBuildings) {
+    std::cout << building << '\n';
+	}
+	std::cout << " CURRENTLY CASE SENSITIVE, PLEASE ENTER EXACTLY AS SHOWN ABOVE " << std::endl;
 	std::cout << "What building would you like to start from? (Please enter the building name): ";
 	std::cin.ignore();
 	std::getline(std::cin, userStart);
 	std::cout << "What building would you like to end at? (Please enter the building name): ";
 	std::getline(std::cin, userEnd);
+	std::cout << "-------------------------------------------" << std::endl;
 
 		const auto& adjList = graph.getAdjList();
 		if (adjList.find(userStart) != adjList.end()) {
