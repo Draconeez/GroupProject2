@@ -106,14 +106,9 @@ int main(int argc, char* argv[]) {
 			<< " 8. Display department hierarchy\n"
 			<< " 9. Run preorder traversal\n"
 			<< " 10. Exit\n";
-		//Special handling for invalid input
-		if (!(std::cin >> caseNumber)) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "Invalid option. Please try again." << std::endl;
-			continue;
-		}
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the rest of the line after reading the case number
+		std::cout << "Enter your choice: ";
+		std::cin >> caseNumber;
+		std::cin.ignore();
 		switch (caseNumber)
 		{
 		case 1:
@@ -159,7 +154,6 @@ while (true) {
 	}
 	std::cout << " CURRENTLY CASE SENSITIVE, PLEASE ENTER EXACTLY AS SHOWN ABOVE " << std::endl;
 	std::cout << "What building would you like to start from? (Please enter the building name): ";
-	std::cin.ignore();
 	std::getline(std::cin, userStart);
 	std::cout << "What building would you like to end at? (Please enter the building name): ";
 	std::getline(std::cin, userEnd);
