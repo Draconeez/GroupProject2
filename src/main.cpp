@@ -65,21 +65,9 @@ void connectionsLoad(campusGraph& graph, const std::vector<std::string>& accepte
 }
 
 // Opening departments data
-void departmentsLoad(const std::string& dataDir) {
-	std::ifstream file(dataDir + "/departments.txt");
-	if (!file.is_open()) {
-		std::cerr << "Error opening departments.txt" << std::endl;
-		return;
-	}
-	std::string line;
-	while (std::getline(file, line)) {
-		std::istringstream iss(line);
-		std::string departmentName;
-		if (std::getline(iss, departmentName, ',')) {
-			// Process the department name
-		}
-	}
-	file.close();
+void departmentsLoad(DepartmentTree& deptTree, const std::string& dataDir) 
+{
+	deptTree.loadFromFile(dataDir + "/departments.txt");
 }
 
 // Opening facilities data
@@ -94,10 +82,12 @@ int main(int argc, char* argv[]) {
 		dataDir = argv[1];
 	}
 	//Load resources from file
-	HashTable facilityTable;
+	HashTable facilityTable; // Load the facilities data from the file
+	DepartmentTree deptTree; // Load the department hierarchy from the file
 	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
 	buildingsLoad(dataDir, acceptedBuildings);
 	facilitiesLoad(facilityTable, acceptedBuildings, dataDir);
+	departmentsLoad(deptTree, dataDir);
 
 	campusGraph graph;
 	connectionsLoad(graph, acceptedBuildings, dataDir);
@@ -116,8 +106,14 @@ int main(int argc, char* argv[]) {
 			<< " 8. Display department hierarchy\n"
 			<< " 9. Run preorder traversal\n"
 			<< " 10. Exit\n";
-		std::cin >> caseNumber;
-
+		//Special handling for invalid input
+		if (!(std::cin >> caseNumber)) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << "Invalid option. Please try again." << std::endl;
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore the rest of the line after reading the case number
 		switch (caseNumber)
 		{
 		case 1:
@@ -125,8 +121,6 @@ int main(int argc, char* argv[]) {
 				facilityTable.displayAll();
 				break;
 		case 2:
-				// Search facility by ID
-				std::cout << "Enter facility ID: ";
 			{
 			std::cout << "Enter facility ID: ";
             std::string rawId;
@@ -184,16 +178,41 @@ while (true) {
 }
 			break;
 		case 6:
+			{
 			// Add department
+			std::string deptName;
+			std::cout << "Enter department name: ";
+			std::getline(std::cin, deptName);
+
+			if (deptTree.isEmpty()) {
+				deptTree.addDepartment(deptName, "NONE");
+			} else {
+				std::string parentName;
+				std::cout << "Enter parent department name: ";
+				std::getline(std::cin, parentName);
+				deptTree.addDepartment(deptName, parentName);
+			}
 			break;
+		}
 		case 7:
-			// Search department 
+		{
+			std::cout << "Enter department name to search: ";
+			std::string targetDept;
+			std::getline(std::cin, targetDept);
+			if (targetDept.empty()) {
+				std::cout << "Error: Department name cannot be blank." << std::endl;
+			} else {
+				deptTree.searchDepartment(targetDept);
+			}
 			break;
+		}
+	
 		case 8:
-			// Display department hierarchy
+			deptTree.displayHierarchy();
 			break;
 		case 9:
-			// Run preorder traversal
+		deptTree.displayPreorder();
+		
 			break;
 		case 10:
 			// Exit

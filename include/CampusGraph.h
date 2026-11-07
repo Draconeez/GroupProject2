@@ -1,3 +1,7 @@
+//File: CampusGraph.h
+//Purpose: Declare the campusGraph class - Sets the groundwork for an adjacency list map and BFS system
+//Author: Will
+
 #ifndef CAMPUS_GRAPH_H
 #define CAMPUS_GRAPH_H
 
@@ -9,7 +13,7 @@
 #include <string>
 #include <queue>
 #include <unordered_set>
-
+#include <algorithm>
 class campusGraph {
 
 private:
