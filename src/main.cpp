@@ -58,22 +58,10 @@ void buildingsLoad(const std::string& dataDir, std::vector<std::string>& accepte
 	file.close();
 	std::cout << "buildings.txt: " << accepted << " accepted, " << rejected << " rejected"<< std::endl;
 }
-// Opening connections data
-void connectionsLoad(const std::string& dataDir) {
-	std::ifstream file(dataDir + "/connections.txt");
-	if (!file.is_open()) {
-		std::cerr << "Error opening connections.txt" << std::endl;
-		return;
-	}
-	std::string line;
-	while (std::getline(file, line)) {
-		std::istringstream iss(line);
-		std::string connections;
-		if (std::getline(iss, connections, ',')) {
-			// Process the connections
-		}
-	}
-	file.close();
+
+// opening connections data and loading into campusGraph object
+void connectionsLoad(campusGraph& graph, const std::vector<std::string>& acceptedBuildings, const std::string& dataDir) {
+	graph.loadFromFile(dataDir + "/connections.txt");
 }
 
 // Opening departments data
@@ -110,6 +98,9 @@ int main(int argc, char* argv[]) {
 	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
 	buildingsLoad(dataDir, acceptedBuildings);
 	facilitiesLoad(facilityTable, acceptedBuildings, dataDir);
+
+	campusGraph graph;
+	connectionsLoad(graph, acceptedBuildings, dataDir);
 
 	int caseNumber = 0;
 	while (caseNumber != 10) {
@@ -149,29 +140,11 @@ int main(int argc, char* argv[]) {
 			}
 		case 3:
 			// View campus graph - Will's Job
-		{
-			campusGraph graph(false); // Create an undirected graph
-
-			if (graph.loadFromFile(dataDir + "/connections.txt")) {
-				graph.displayGraph();
-			}
-			else {
-				std::cerr << "Error loading graph from file." << std::endl;
-			}
-		}
+			graph.displayGraph();
 			break;
 		case 4:
 			// Display graph counts and degrees
-			{
-			campusGraph graph(false); // setup as undirected (formality ig) 
-
-			if (graph.loadFromFile(dataDir + "/connections.txt")) {
-				graph.displayCAD();
-			}
-			else {
-				std::cerr << "Error loading graph from file." << std::endl;
-			}
-		}
+			graph.displayCAD();
 			break;
 		case 5:
 			// Find reachable buildings(BFS) 
@@ -181,19 +154,18 @@ int main(int argc, char* argv[]) {
 	std::string line;
 
 while (true) {
-	std::cout << "What building would you like to start from? (Please enter the building name): ";
-	std::cin.ignore();
-	std::getline(std::cin, userStart);
-	std::cout << "What building would you like to end at? (Please enter the building name): ";
-	std::getline(std::cin, userEnd);
 
 	buildingsLoad(dataDir, acceptedBuildings); // list buildings for user
 	for (const auto& building : acceptedBuildings) {
 		std::cout << building << std::endl;
 	}
 
-	campusGraph graph(false);
-	if (graph.loadFromFile(dataDir + "/connections.txt")) {
+	std::cout << "What building would you like to start from? (Please enter the building name): ";
+	std::cin.ignore();
+	std::getline(std::cin, userStart);
+	std::cout << "What building would you like to end at? (Please enter the building name): ";
+	std::getline(std::cin, userEnd);
+
 		const auto& adjList = graph.getAdjList();
 		if (adjList.find(userStart) != adjList.end()) {
 			graph.BFS(userStart, userEnd);
@@ -202,11 +174,6 @@ while (true) {
 		else {
 			std::cout << "Building not found. Please try again." << std::endl;
 			break; // Exit the loop if the building is not found
-		}
-	}
-	else {
-		std::cerr << "Error loading graph from file." << std::endl;
-		break; // Exit the loop if there's an error loading the graph
 		}
 	}
 }
