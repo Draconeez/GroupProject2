@@ -1,4 +1,5 @@
-Member A: Test Data
+=== Member A (Aryn S. ) Test Data: Facilities === 
+
 ./groupProj2 testdata
 Warning [buildings.txt:12]: Duplicate building 'library'.
 Warning [buildings.txt:13]: Wrong field count or empty building name.
@@ -118,6 +119,118 @@ Facility Category: Computer Lab
 Total facilities: 12
 
 # Correctly traverses all facilities displaying all info.
+
+
+
+=== Member B - (William Jenkins) - CampusGraph functions Test Results === 
+
+./groupProj2
+
+buildings.txt: 7 accepted, 0 rejected
+facilities.txt: 10 accepted, 0 rejected (hash capacity 17, entries 10, collisions 0)
+data/departments.txt: 7 accepted, 0 rejected
+===== Welcome to the Campus Navigation and Facility Analytics System! =====
+Select an option from the menu below:
+ 1. View all facilities
+ 2. Search facility by ID
+ 3. View campus graph
+ 4. Display graph counts and degrees
+ 5. Find reachable buildings(BFS)
+ 6. Add department
+ 7. Search department
+ 8. Display department hierarchy
+ 9. Run preorder traversal
+ 10. Exit
+Enter your choice: 3
+ ====== Connections between Campus Buildings ===== 
+gym   -->   student union, business building,
+engineering building   -->   science building,
+science building   -->   student union, engineering building,
+business building   -->   library, gym,
+student union   -->   library, science building, gym,
+library   -->   student union, business building,
+====================================================
+
+# Displays correct connections from Connections.txt
+
+===== Welcome to the Campus Navigation and Facility Analytics System! =====
+Select an option from the menu below:
+ 1. View all facilities
+ 2. Search facility by ID
+ 3. View campus graph
+ 4. Display graph counts and degrees
+ 5. Find reachable buildings(BFS)
+ 6. Add department
+ 7. Search department
+ 8. Display department hierarchy
+ 9. Run preorder traversal
+ 10. Exit
+Enter your choice: 4
+ ====== Counts and Degrees ======
+Total amount of buildings: 6
+-------------------------------------------
+ - gym is connected to 2 other building(s).
+ - engineering building is connected to 1 other building(s).
+ - science building is connected to 2 other building(s).
+ - business building is connected to 2 other building(s).
+ - student union is connected to 3 other building(s).
+ - library is connected to 2 other building(s).
+-------------------------------------------
+
+# Lists proper counts and degrees of all buildings 
+
+===== Welcome to the Campus Navigation and Facility Analytics System! =====
+Select an option from the menu below:
+ 1. View all facilities
+ 2. Search facility by ID
+ 3. View campus graph
+ 4. Display graph counts and degrees
+ 5. Find reachable buildings(BFS)
+ 6. Add department
+ 7. Search department
+ 8. Display department hierarchy
+ 9. Run preorder traversal
+ 10. Exit
+Enter your choice: 5
+===== Find Reachable Buildings (BFS) =====
+Available buildings:
+-------------------------------------------
+Library
+Student Union
+Science Building
+Engineering Building
+Business Building
+Gym
+Observatory
+What building would you like to start from? (Please enter the building name): BUsinESS BuIldInG
+What building would you like to end at? (Please enter the building name):     STuDent UnIon
+-------------------------------------------
+You are located in business building and trying to get to student union
+ ------------------------------------------------
+Path found from business building to student union:
+business building -> library -> student union
+
+# Ignores improper capitalization and whitespace, finds the proper shortest path between the two desired buildings 
+
+===== Welcome to the Campus Navigation and Facility Analytics System! =====
+Select an option from the menu below:
+ 1. View all facilities
+ 2. Search facility by ID
+ 3. View campus graph
+ 4. Display graph counts and degrees
+ 5. Find reachable buildings(BFS)
+ 6. Add department
+ 7. Search department
+ 8. Display department hierarchy
+ 9. Run preorder traversal
+ 10. Exit
+Enter your choice: 10
+
+# Exits properly 
+
+whj0018@cell15-cse:~/GroupProject2$
+
+
 
 
 === Member C (Ujjwol KC) - DepartmentTree Test Results ===
