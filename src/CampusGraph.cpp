@@ -5,34 +5,51 @@
 #include <iostream>
 #include <limits>
 
+//Converts string to lowercase
+std::string campusGraph::toLower(const std::string& str) {
+	size_t first = str.find_first_not_of(" \t\n\r\f\v");
+	if (first == std::string::npos) {
+		return "";
+	}
+	size_t last = str.find_last_not_of(" \t\n\r\f\v");
+	std::string result = str.substr(first, last - first + 1);
+	for (size_t i = 0; i < result.length(); ++i) {
+        result[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(result[i])));
+    }
+    return result;
+}
+
 campusGraph::campusGraph(bool directed) : isDirected(directed) {}
 
-bool campusGraph::loadFromFile(const std::string& filename) {
+
+void campusGraph::loadFromFile(const std::string& filename) {
 	std::ifstream file(filename);
 	if (!file.is_open()) {
 		std::cerr << "Error opening " << filename << std::endl; // added error message for clarity
-		return false;
-	}
+		return;
+	}			
 
 	std::string line;
 	std::string dummyHeader;
-	std::getline(file, dummyHeader); // file.ignore() causing issues -- dummy header preffered to skip line one 
+	std::getline(file, dummyHeader); // file.ignore() causing issues -- dummy header preffered to skip line one
 
 	while (std::getline(file, line)) {
 		std::istringstream iss(line);
 		std::string src, dest;
 		if (std::getline(iss, src, '|') && std::getline(iss, dest, '|')) {
-			addEdge(src, dest);
+			addEdge(toLower(src), toLower(dest));
 		}
 	}
 	file.close();
-	return true;
+	return;
 }	
 
 void campusGraph::addEdge(const std::string& src, const std::string& dest) {
-	adjList[src].push_back(dest);
+	std::string normalizedSrc = toLower(src);
+	std::string normalizedDest = toLower(dest);
+	adjList[normalizedSrc].push_back(normalizedDest);
 	if (!isDirected) {
-		adjList[dest].push_back(src);
+		adjList[normalizedDest].push_back(normalizedSrc);
 	}
 }
 
@@ -57,8 +74,10 @@ const std::unordered_map<std::string, std::vector<std::string>>& campusGraph::ge
 
 void campusGraph::BFS(const std::string& startNode, const std::string& endNode)
 {
+	const std::string normalizedStart = toLower(startNode);
+	const std::string normalizedEnd = toLower(endNode);
 
-	if (adjList.find(startNode) == adjList.end()) {
+	if (adjList.find(normalizedStart) == adjList.end()) {
 		std::cout << "Error: Starting node " << startNode << " does not exist.\n";
 		return;
 	}
@@ -73,17 +92,17 @@ void campusGraph::BFS(const std::string& startNode, const std::string& endNode)
 
 
 	// We start the BFS with the starting building the user entered 
-	visited.insert(startNode);
-	q.push(startNode);
+	visited.insert(normalizedStart);
+	q.push(normalizedStart);
 	bool found = false;
 
-	std::cout << "You are located in " << startNode << " and trying to get to " << endNode << "\n";
+	std::cout << "You are located in " << normalizedStart << " and trying to get to " << normalizedEnd << "\n";
 	std::cout << " ------------------------------------------------\n";
 
 	while (!q.empty()) {
 		std::string currentNode = q.front();
 		q.pop();
-		if (currentNode == endNode) {
+		if (currentNode == normalizedEnd) { // if destination is found, it ends 
 			found = true;
 			break;
 		}
@@ -104,16 +123,16 @@ void campusGraph::BFS(const std::string& startNode, const std::string& endNode)
 
 	// Print the path for the user !
 	if (found) {
-		std::cout << "Path found from " << startNode << " to " << endNode << ":\n";
+		std::cout << "Path found from " << normalizedStart << " to " << normalizedEnd << ":\n";
 
 		// Reconstruct  path backwards
 		std::vector<std::string> path;
-		std::string current = endNode;
-		while (current != startNode) {
+		std::string current = normalizedEnd;
+		while (current != normalizedStart) {
 			path.push_back(current);
 			current = parent[current];
 		}
-		path.push_back(startNode);
+		path.push_back(normalizedStart);
 
 		// Print path in correct order
 		for (auto it = path.rbegin(); it != path.rend(); ++it) {
@@ -125,7 +144,7 @@ void campusGraph::BFS(const std::string& startNode, const std::string& endNode)
 		std::cout << "\n";
 	}
 	else {
-		std::cout << "No path exists between " << startNode << " and " << endNode << ".\n";
+		std::cout << "No path exists between " << normalizedStart << " and " << normalizedEnd << ".\n";
 	}
 };
 
