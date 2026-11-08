@@ -137,40 +137,27 @@ int main(int argc, char* argv[]) {
 			break;
 		case 5:
 			// Find reachable buildings(BFS) 
-		{
-	std::string userStart;
-	std::string userEnd;
-	std::string line;
+			{
+		std::string userStart;
+		std::string userEnd;
+		std::string line;
 
-while (true) {
+		std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
+		std::cout << "Available buildings: " << std::endl;
+		std::cout << "-------------------------------------------" << std::endl;
 
-	
-	std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
-	std::cout << "Available buildings: " << std::endl;
-	std::cout << "-------------------------------------------" << std::endl;
+		for (const auto& building : acceptedBuildings) {
+    		std::cout << building << '\n';
+		} // Lists all the buildings in the acceptedBuildings vector
 
-	for (const auto& building : acceptedBuildings) {
-    std::cout << building << '\n';
-	}
-	std::cout << " CURRENTLY CASE SENSITIVE, PLEASE ENTER EXACTLY AS SHOWN ABOVE " << std::endl;
-	std::cout << "What building would you like to start from? (Please enter the building name): ";
-	std::getline(std::cin, userStart);
-	std::cout << "What building would you like to end at? (Please enter the building name): ";
-	std::getline(std::cin, userEnd);
-	std::cout << "-------------------------------------------" << std::endl;
-
-		const auto& adjList = graph.getAdjList();
-		if (adjList.find(userStart) != adjList.end()) {
+			std::cout << "What building would you like to start from? (Please enter the building name): ";
+			std::getline(std::cin, userStart);
+			std::cout << "What building would you like to end at? (Please enter the building name): ";
+			std::getline(std::cin, userEnd);
+			std::cout << "-------------------------------------------" << std::endl;
 			graph.BFS(userStart, userEnd);
-			break; // Exit the loop if a valid building is found
-		}
-		else {
-			std::cout << "Building not found. Please try again." << std::endl;
-			break; // Exit the loop if the building is not found
-		}
-	}
-}
-			break;
+	break;	
+			}
 		case 6:
 			{
 			// Add department
