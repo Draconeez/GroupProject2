@@ -7,7 +7,7 @@ To run, g++ -std=c++17 -Iinclude src/*.cpp -o groupProj2
 
 to use with test data
 
-,/groupProj2 testdata
+./groupProj2 testdata
 
 # Repo Link
 https://github.com/Draconeez/GroupProject2
