@@ -14,7 +14,8 @@
 #include <queue>
 #include <unordered_set>
 #include <algorithm>
-#include <cctype>
+#include <iostream>
+#include <limits>
 
 class campusGraph {
 
@@ -26,6 +27,10 @@ public:
 	explicit campusGraph(bool directed = false);
 
 	static std::string toLower(const std::string& str);
+
+	static std::string trim(const std::string& str);
+
+	bool isCommentOrBlank(const std::string& line);
 
 	void addEdge(const std::string& src, const std::string& dest);
 

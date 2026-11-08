@@ -2,25 +2,60 @@
 //Purpose: Implements the campusGraph class - loads connections.txt, gathers the edges to create a graph, displays connections using an adjacency list. BFS uses connections for the shortest route. DisplayCAD for the degrees of each building.  
 //Author: Will
 #include "CampusGraph.h"
-#include <iostream>
-#include <limits>
 
-//Converts string to lowercase
+campusGraph::campusGraph(bool directed) : isDirected(directed) {}
+
+//Converts a string to lowercase
 std::string campusGraph::toLower(const std::string& str) {
-	size_t first = str.find_first_not_of(" \t\n\r\f\v");
-	if (first == std::string::npos) {
-		return "";
-	}
-	size_t last = str.find_last_not_of(" \t\n\r\f\v");
-	std::string result = str.substr(first, last - first + 1);
-	for (size_t i = 0; i < result.length(); ++i) {
+    std::string result = str;
+    for (size_t i = 0; i < result.length(); ++i) {
         result[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(result[i])));
     }
     return result;
 }
 
-campusGraph::campusGraph(bool directed) : isDirected(directed) {}
+namespace {
+    std::string normalizeBuildingName(const std::string& name) {
+        std::string normalized;
+        bool inSpace = false;
 
+        for (unsigned char ch : name) {
+            if (std::isspace(ch)) {
+                inSpace = true;
+            } else {
+                if (inSpace && !normalized.empty()) {
+                    normalized.push_back(' ');
+                }
+                normalized.push_back(static_cast<char>(std::tolower(ch)));
+                inSpace = false;
+            }
+        }
+        return normalized;
+    }
+}
+
+//Trims leading and trailing spaces, tabs, carriage returns, and newlines 
+std::string campusGraph::trim(const std::string& str) {
+    const std::string whitespace = " \t\r\n";
+    size_t first = str.find_first_not_of(whitespace);
+    if (first == std::string::npos) {
+        return "";
+    }
+    size_t last = str.find_last_not_of(whitespace);
+    return str.substr(first, last - first + 1);
+}
+
+// Returns true if a line is blank or starts with '#'
+bool campusGraph::isCommentOrBlank(const std::string& line) {
+    std::string cleaned = trim(line);
+    if (cleaned.empty()) {
+        return true;
+    }
+    if (cleaned[0] == '#') {
+        return true;
+    }
+    return false;
+}
 
 void campusGraph::loadFromFile(const std::string& filename) {
 	std::ifstream file(filename);
@@ -30,10 +65,13 @@ void campusGraph::loadFromFile(const std::string& filename) {
 	}			
 
 	std::string line;
-	std::string dummyHeader;
-	std::getline(file, dummyHeader); // file.ignore() causing issues -- dummy header preffered to skip line one
 
 	while (std::getline(file, line)) {
+
+		if (isCommentOrBlank(line)) {
+        continue;
+    }
+	
 		std::istringstream iss(line);
 		std::string src, dest;
 		if (std::getline(iss, src, '|') && std::getline(iss, dest, '|')) {
@@ -45,8 +83,8 @@ void campusGraph::loadFromFile(const std::string& filename) {
 }	
 
 void campusGraph::addEdge(const std::string& src, const std::string& dest) {
-	std::string normalizedSrc = toLower(src);
-	std::string normalizedDest = toLower(dest);
+	std::string normalizedSrc = normalizeBuildingName(src);
+	std::string normalizedDest = normalizeBuildingName(dest);
 	adjList[normalizedSrc].push_back(normalizedDest);
 	if (!isDirected) {
 		adjList[normalizedDest].push_back(normalizedSrc);
@@ -74,8 +112,8 @@ const std::unordered_map<std::string, std::vector<std::string>>& campusGraph::ge
 
 void campusGraph::BFS(const std::string& startNode, const std::string& endNode)
 {
-	const std::string normalizedStart = toLower(startNode);
-	const std::string normalizedEnd = toLower(endNode);
+	const std::string normalizedStart = normalizeBuildingName(startNode);
+	const std::string normalizedEnd = normalizeBuildingName(endNode);
 
 	if (adjList.find(normalizedStart) == adjList.end()) {
 		std::cout << "Error: Starting node " << startNode << " does not exist.\n";
