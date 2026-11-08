@@ -108,8 +108,18 @@ int main(int argc, char* argv[]) {
 			<< " 10. Exit\n";
 		std::cout << "Enter your choice: ";
 		std::cin >> caseNumber;
-		std::cin.ignore();
-		switch (caseNumber)
+
+		if (!(std::cin >> caseNumber)) { // Get reponse, and clear anything that is not an int 
+			std::cin.clear();
+			std::string invalidInput;
+			std::getline(std::cin, invalidInput);
+			caseNumber = 0;
+			std::cout << "Invalid option. Please enter a number from 1 to 10." << std::endl;
+			continue;
+		}
+		std::string remainingInput;
+		std::getline(std::cin, remainingInput);  // if input is int, it passes through to this 
+		
 		{
 		case 1:
 				// Display all facilities
