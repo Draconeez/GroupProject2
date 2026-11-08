@@ -1,3 +1,125 @@
+Member A: Test Data
+./groupProj2 testdata
+Warning [buildings.txt:12]: Duplicate building 'library'.
+Warning [buildings.txt:13]: Wrong field count or empty building name.
+buildings.txt: 7 accepted, 2 rejected
+Warning [facilities.txt:18]: Duplicate facility ID 'F001'.
+Warning [facilities.txt:21]: Wrong field count (expected 4, got 3).
+Warning [facilities.txt:24]: Wrong field count (expected 4, got 5).
+Warning [facilities.txt:27]: Empty required field.
+Warning [facilities.txt:30]: Invalid facility ID format 'F12' (expected F followed by 3 digits).
+Warning [facilities.txt:33]: Unknown building reference 'Space Station'.
+facilities.txt: 12 accepted, 6 rejected (hash capacity 17, entries 12, collisions 2)
+Warning: testdata/departments.txt line 11 rejected (duplicate name).
+Warning: testdata/departments.txt line 12 rejected (unknown parent).
+Warning: testdata/departments.txt line 13 rejected (empty field).
+Warning: testdata/departments.txt line 14 rejected (invalid delimiter format).
+testdata/departments.txt: 7 accepted, 4 rejected
+===== Welcome to the Campus Navigation and Facility Analytics System! =====
+Select an option from the menu below:
+ 1. View all facilities
+ 2. Search facility by ID
+ 3. View campus graph
+ 4. Display graph counts and degrees
+ 5. Find reachable buildings(BFS)
+ 6. Add department
+ 7. Search department
+ 8. Display department hierarchy
+ 9. Run preorder traversal
+ 10. Exit
+Enter your choice: 
+# As we can see it recognizes incorrect/bad data and rejects it.
+
+Enter your choice: 2
+Enter facility ID: F002
+Found: Tutoring Center | Library | Tutoring Center
+
+# Correctly finds facilities
+
+Enter your choice: 2
+Enter facility ID: F333
+Not found: no facility with ID F333
+
+# Correctly identifies incorrect facilities through ID
+
+===== Welcome to the Campus Navigation and Facility Analytics System! =====
+Select an option from the menu below:
+ 1. View all facilities
+ 2. Search facility by ID
+ 3. View campus graph
+ 4. Display graph counts and degrees
+ 5. Find reachable buildings(BFS)
+ 6. Add department
+ 7. Search department
+ 8. Display department hierarchy
+ 9. Run preorder traversal
+ 10. Exit
+Enter your choice: 1
+Facility ID: F001
+Facility Name: Main Reading Room
+Facility Building: Library
+Facility Category: Library
+------------------------
+Facility ID: F002
+Facility Name: Tutoring Center
+Facility Building: Library
+Facility Category: Tutoring Center
+------------------------
+Facility ID: F003
+Facility Name: Student Services Office
+Facility Building: Student Union
+Facility Category: Student Services Office
+------------------------
+Facility ID: F004
+Facility Name: Computer Lab A
+Facility Building: Science Building
+Facility Category: Computer Lab
+------------------------
+Facility ID: F005
+Facility Name: Room 101
+Facility Building: Engineering Building
+Facility Category: Classroom
+------------------------
+Facility ID: F006
+Facility Name: Computer Lab B
+Facility Building: Engineering Building
+Facility Category: Computer Lab
+------------------------
+Facility ID: F007
+Facility Name: Room 101
+Facility Building: Business Building
+Facility Category: Classroom
+------------------------
+Facility ID: F008
+Facility Name: Fitness Center
+Facility Building: Gym
+Facility Category: Recreation
+------------------------
+Facility ID: F009
+Facility Name: Room 205
+Facility Building: Science Building
+Facility Category: Classroom
+------------------------
+Facility ID: F010
+Facility Name: Research Help Desk
+Facility Building: Library
+Facility Category: Library
+------------------------
+Facility ID: F014
+Facility Name: Quiet Study Room #5
+Facility Building: Library
+Facility Category: Study Space
+------------------------
+Facility ID: F015
+Facility Name: Grad Computer Lab
+Facility Building: Science Building
+Facility Category: Computer Lab
+------------------------
+Total facilities: 12
+
+# Correctly traverses all facilities displaying all info.
+
+
 === Member C (Ujjwol KC) - DepartmentTree Test Results ===
 
 1. File Loading & Validation (Startup)
