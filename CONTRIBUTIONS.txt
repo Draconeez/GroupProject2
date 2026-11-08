@@ -18,4 +18,7 @@
 
 
 == Member C - KC ==
-- txt here 
+- Implemented DepartmentTree and DepartmentNode classes.
+- Built the file loading logic with strict delimiter validation.
+- Implemented case-insensitive tree searches and duplicate detection.
+- Managed dynamic memory and the Rule of Three to prevent memory leaks.

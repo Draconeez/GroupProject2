@@ -1,3 +1,8 @@
+/*
+* Author: Ujjwol KC
+* Purpose: Manages the binary tree data structure for departments, 
+*          handling file loading, case-insensitive searches, and hierarchy display.
+*/
 #include "../include/DepartmentTree.h"
 #include <iostream>
 #include <fstream>

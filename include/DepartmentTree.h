@@ -1,3 +1,8 @@
+/*
+* Author: Ujjwol KC
+* Purpose: Manages the binary tree data structure for departments, 
+*          handling file loading, case-insensitive searches, and hierarchy display.
+*/
 #ifndef DEPARTMENT_TREE_H
 #define DEPARTMENT_TREE_H
 
