@@ -96,18 +96,25 @@ int main(int argc, char* argv[]) {
 	while (caseNumber != 10) {
 		std::cout << "===== Welcome to the Campus Navigation and Facility Analytics System! =====" << std::endl;
 		std::cout << "Select an option from the menu below:" << std::endl;
-		std::cout << " 1. View all facilities\n"
-			<< " 2. Search facility by ID\n"
-			<< " 3. View campus graph\n"
-			<< " 4. Display graph counts and degrees\n"
-			<< " 5. Find reachable buildings(BFS)\n"
-			<< " 6. Add department\n"
-			<< " 7. Search department\n"
-			<< " 8. Display department hierarchy\n"
-			<< " 9. Run preorder traversal\n"
-			<< " 10. Exit\n";
+		std::cout << " View all facilities\n"
+			<< " Search facility by ID\n"
+			<< " Search facility by name\n" 
+			<< " Search facility by category\n"
+			<< " View campus graph\n"
+			<< " Display graph counts and degrees\n"
+			<< " Find reachable buildings (BFS)\n"
+			<< " Find shortest path (BFS)\n"
+			<< " Add department\n"
+			<< " Search department\n"
+			<< " Display department hierarchy*\n"
+			<< " Preorder traversal**\n"
+			<< " Postorder traversal\n"
+			<< " Level-order traversal\n"
+			<< " Department statistics\n"
+			<< " Facility category report\n"
+			<< " Graph connectivity report\n"
+			<< " Exit\n";
 		std::cout << "Enter your choice: ";
-		std::cin >> caseNumber;
 
 		if (!(std::cin >> caseNumber)) { // Get reponse, and clear anything that is not an int 
 			std::cin.clear();
@@ -120,7 +127,7 @@ int main(int argc, char* argv[]) {
 		std::string remainingInput;
 		std::getline(std::cin, remainingInput);  // if input is int, it passes through to this 
 		
-		switch(caseNumber)
+	switch(caseNumber)
 		{
 		case 1:
 				// Display all facilities
@@ -128,6 +135,7 @@ int main(int argc, char* argv[]) {
 				break;
 		case 2:
 			{
+				// search facility by ID
 			std::cout << "Enter facility ID: ";
             std::string rawId;
             std::getline(std::cin, rawId);
@@ -139,16 +147,56 @@ int main(int argc, char* argv[]) {
             break;
 			}
 		case 3:
-			// View campus graph - Will's Job
+		{
+			// search facility by name
+		}
+		case 4:
+		{
+			// search facility by category
+		}
+		case 5:
+			// View campus graph 
 			graph.displayGraph();
 			break;
-		case 4:
+		case 6:
 			// Display graph counts and degrees
 			graph.displayCAD();
 			break;
-		case 5:
+		case 7:
 			// Find reachable buildings(BFS) 
 			{
+				std::string userStart;
+				std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
+				std::cout << "Available buildings:" << std::endl;
+				for (const auto& building : acceptedBuildings) {
+					std::cout << building << '\n';
+				}
+				std::cout << "Enter the starting building: ";
+				std::getline(std::cin, userStart);
+
+				const std::string normalizedStart = HashTable::toLower(HashTable::trim(userStart));
+				bool validStart = false;
+				for (const auto& building : acceptedBuildings) {
+					if (HashTable::toLower(building) == normalizedStart) {
+						userStart = building;
+						validStart = true;
+						break;
+					}
+				}
+				if (!validStart) {
+					std::cout << "Error: Please enter a valid building name." << std::endl;
+				} else {
+					for (const auto& destination : acceptedBuildings) {
+						if (destination != userStart) {
+							graph.BFS(userStart, destination);
+						}
+					}
+				}
+			}
+			break;	
+		case 8:
+			// Find shortest path (BFS)
+						{
 		std::string userStart;
 		std::string userEnd;
 		std::string line;
@@ -167,9 +215,9 @@ int main(int argc, char* argv[]) {
 			std::getline(std::cin, userEnd);
 			std::cout << "-------------------------------------------" << std::endl;
 			graph.BFS(userStart, userEnd);
-	break;	
-			}
-		case 6:
+		}
+		break;
+		case 9:
 			{
 			// Add department
 			std::string deptName;
@@ -186,7 +234,7 @@ int main(int argc, char* argv[]) {
 			}
 			break;
 		}
-		case 7:
+		case 10:
 		{
 			std::cout << "Enter department name to search: ";
 			std::string targetDept;
@@ -198,15 +246,28 @@ int main(int argc, char* argv[]) {
 			}
 			break;
 		}
-	
-		case 8:
+		case 11:
 			deptTree.displayHierarchy();
 			break;
-		case 9:
+		case 12:
 		deptTree.displayPreorder();
-		
 			break;
-		case 10:
+		case 13: 
+			//  Postorder traversal 
+			break;
+		case 14:
+			// Level-order traversal
+			break;
+		case 15: 
+			// department statictis 
+			break;
+		case 16: 
+			// Facility catergory report 
+			break;
+		case 17:
+			// graph connectivity report 
+			break;
+		case 18:
 			// Exit
 			break;
 		default:
