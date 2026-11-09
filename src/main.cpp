@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
 			std::string invalidInput;
 			std::getline(std::cin, invalidInput);
 			caseNumber = 0;
-			std::cout << "Invalid option. Please enter a number from 1 to 18." << std::endl;
+			std::cout << "====== Invalid option. Please enter a number from 1 to 18. ======" << std::endl;
 			continue;
 		}
 		std::string remainingInput;
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
             std::string rawId;
             std::getline(std::cin, rawId);
             if (HashTable::trim(rawId).empty()) {
-                std::cout << "Error: Facility ID cannot be blank.";
+                std::cout << " ====== Error: Facility ID cannot be blank. ======";
             } else {
                 facilityTable.searchAndPrintById(rawId);
             }
@@ -173,13 +173,14 @@ int main(int argc, char* argv[]) {
 		std::string line;
 
 		std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
-		std::cout << "Available buildings: " << std::endl;
-		std::cout << "-------------------------------------------" << std::endl;
+		std::cout << " - Available buildings: " << std::endl;
 
+		
 		for (const auto& building : acceptedBuildings) {
     		std::cout << building << '\n';
 		} // Lists all the buildings in the acceptedBuildings vector
 
+			std::cout << "-------------------------------------------" << std::endl;
 			std::cout << "What building would you like to start from? (Please enter the building name): ";
 			std::getline(std::cin, userStart);
 			std::cout << "What building would you like to end at? (Please enter the building name): ";
@@ -211,17 +212,17 @@ int main(int argc, char* argv[]) {
 			std::string targetDept;
 			std::getline(std::cin, targetDept);
 			if (targetDept.empty()) {
-				std::cout << "Error: Department name cannot be blank." << std::endl;
+				std::cout << "====== Error: Department name cannot be blank. ======" << std::endl;
 			} else {
 				deptTree.searchDepartment(targetDept);
 			}
 			break;
 		}
 		case 11:
-			deptTree.displayHierarchy();
+			deptTree.displayHierarchy(); // *Display the department tree with each department on a separate line, using four spaces of indentation per depth level.
 			break;
 		case 12:
-		deptTree.displayPreorder();
+		deptTree.displayPreorder(); // **Display the departments in preorder traversal order as a sequence, without indentation.
 			break;
 		case 13: 
 			//  Postorder traversal 
@@ -233,16 +234,16 @@ int main(int argc, char* argv[]) {
 			// department statictis 
 			break;
 		case 16: 
-			// Facility catergory report 
+			// Facility category report: for each distinct category, display facility count and percentage of all accepted facilities (one decimal place). Group category names ignoring capitalization and preserve the spelling of the first accepted category. Display the total count. If no facilities exist, state that none are available and show total zero; never divide by zero.
 			break;
 		case 17:
-			// graph connectivity report 
+			// Graph connectivity report: display total buildings, total connections, every building tied for highest degree, isolated buildings (or None), and the number of connected components. If there are no buildings, display a clear message with zero totals.
 			break;
 		case 18:
 			// Exit
 			break;
 		default:
-			std::cout << "Invalid option. Please try again." << std::endl;
+			std::cout << "====== Invalid option. Please try again. ======" << std::endl;
 			break;
 		}
 	}
