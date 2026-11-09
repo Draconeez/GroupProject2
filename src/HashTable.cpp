@@ -336,7 +336,7 @@ void HashTable::searchAndPrintById(const std::string& rawInput) const {
 
     //OC1: Invalid ID format
     if (!isValidIdFormat(normId)) {
-        std::cout << "Invalid format: an ID is F followed by exactly three digits\n";
+        std::cout << "====== Invalid format: an ID is F followed by exactly three digits ======\n";
         return;
     }
 
@@ -344,12 +344,12 @@ void HashTable::searchAndPrintById(const std::string& rawInput) const {
 
     //OC2: Valid format, but not found
     if (found == nullptr) {
-        std::cout << "Not found: no facility with ID " << normId << "\n";
+        std::cout << "====== Not found: no facility with ID " << normId << " ======\n";
         return;
     }
 
     //OC3: Found
-    std::cout << "Found: " << found->getFacilityName() << " | "
+    std::cout << "====== Found: " << found->getFacilityName() << " | "
               << found->getFacilityBuilding() << " | "
-              << found->getFacilityCategory() << "\n";
+              << found->getFacilityCategory() << " ======\n";
 }

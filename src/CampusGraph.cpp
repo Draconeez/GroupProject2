@@ -182,7 +182,7 @@ void campusGraph::BFS(const std::string& startNode, const std::string& endNode)
 		std::cout << "\n";
 	}
 	else {
-		std::cout << "No path exists between " << normalizedStart << " and " << normalizedEnd << ".\n";
+		std::cout << " === No path exists between " << normalizedStart << " and " << normalizedEnd << " === \n";
 	}
 };
 
@@ -202,5 +202,5 @@ void campusGraph::displayCAD() const
 	for (const auto& pair : adjList) {
 		std::cout << " - " << pair.first << " is connected to " << pair.second.size() << " other building(s). " << std::endl;
 	};
-	std::cout << "-------------------------------------------" << std::endl;
+	std::cout << "================================================" << std::endl;
 };

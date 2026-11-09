@@ -64,7 +64,7 @@ bool DepartmentTree::addDepartment(const string& name, const string& parentName)
     string cleanParent = trimWhitespace(parentName);
 
     if (cleanName.empty()) {
-        cout << "Error: Department name cannot be empty.\n";
+        cout << "======Error: Department name cannot be empty.======\n";
         return false;
     }
 
@@ -75,13 +75,13 @@ bool DepartmentTree::addDepartment(const string& name, const string& parentName)
     }
 
     if (findNode(root, cleanName) != nullptr) {
-        cout << "Error: Department '" << cleanName << "' already exists.\n";
+        cout << "====== Error: Department '" << cleanName << "' already exists. ======\n";
         return false;
     }
 
     DepartmentNode* parentNode = findNode(root, cleanParent);
     if (parentNode == nullptr) {
-        cout << "Error: Parent department '" << cleanParent << "' not found.\n";
+        cout << "====== Error: Parent department '" << cleanParent << "' not found. ======\n";
         return false;
     }
 
@@ -97,7 +97,7 @@ void DepartmentTree::searchDepartment(const string& targetName) {
     DepartmentNode* target = findNode(root, cleanName);
     
     if (target == nullptr) {
-        cout << "Department '" << cleanName << "' not found.\n";
+        cout << "====== Department '" << cleanName << "' not found. ======\n";
         return;
     }
 
@@ -131,7 +131,7 @@ void DepartmentTree::printHierarchy(DepartmentNode* node, int depth) {
 
 void DepartmentTree::displayHierarchy() {
     if (root == nullptr) {
-        cout << "No departments are loaded.\n";
+        cout << "====== No departments are loaded. ======\n";
         return;
     }
     printHierarchy(root, 0);
@@ -147,7 +147,7 @@ void DepartmentTree::printPreorder(DepartmentNode* node) {
 
 void DepartmentTree::displayPreorder() {
     if (root == nullptr) {
-        cout << "Tree is empty.\n";
+        cout << "====== Tree is empty. ======\n";
         return;
     }
     printPreorder(root);
@@ -159,8 +159,8 @@ bool DepartmentTree::loadFromFile(const string& filename) {
     int rejected = 0;
 
     if (!file.is_open()) {
-        cout << "Error: Cannot open file " << filename << "\n";
-        cout << filename << ": " << accepted << " accepted, " << rejected << " rejected\n";
+        cout << "====== Error: Cannot open file " << filename << " ======\n";
+        cout << "====== " << filename << ": " << accepted << " accepted, " << rejected << " rejected ======\n";
         return false;
     }
 
@@ -178,7 +178,7 @@ bool DepartmentTree::loadFromFile(const string& filename) {
         size_t delimPos2 = line.find_last_of('|');
         
         if (delimPos1 == string::npos || delimPos1 != delimPos2) {
-            cout << "Warning: " << filename << " line " << lineNumber << " rejected (invalid delimiter format).\n";
+            cout << "====== Warning: " << filename << " line " << lineNumber << " rejected (invalid delimiter format). ======\n";
             rejected++;
             continue;
         }
@@ -187,7 +187,7 @@ bool DepartmentTree::loadFromFile(const string& filename) {
         string parentName = trimWhitespace(line.substr(delimPos1 + 1));
 
         if (deptName.empty() || parentName.empty()) {
-            cout << "Warning: " << filename << " line " << lineNumber << " rejected (empty field).\n";
+            cout << "====== Warning: " << filename << " line " << lineNumber << " rejected (empty field). ======\n";
             rejected++;
             continue;
         }
@@ -198,21 +198,21 @@ bool DepartmentTree::loadFromFile(const string& filename) {
                 totalDepartments++;
                 accepted++;
             } else {
-                cout << "Warning: " << filename << " line " << lineNumber << " rejected (first department parent must be NONE).\n";
+                cout << "====== Warning: " << filename << " line " << lineNumber << " rejected (first department parent must be NONE). ======\n";
                 rejected++;
             }
             continue;
         }
 
         if (findNode(root, deptName) != nullptr) {
-            cout << "Warning: " << filename << " line " << lineNumber << " rejected (duplicate name).\n";
+            cout << "====== Warning: " << filename << " line " << lineNumber << " rejected (duplicate name). ======\n";
             rejected++;
             continue;
         }
 
         DepartmentNode* pNode = findNode(root, parentName);
         if (pNode == nullptr) {
-            cout << "Warning: " << filename << " line " << lineNumber << " rejected (unknown parent).\n";
+            cout << "====== Warning: " << filename << " line " << lineNumber << " rejected (unknown parent). ======\n";
             rejected++;
             continue;
         }
@@ -224,6 +224,6 @@ bool DepartmentTree::loadFromFile(const string& filename) {
     }
 
     file.close();
-    cout << filename << ": " << accepted << " accepted, " << rejected << " rejected\n";
+    cout << "====== " << filename << ": " << accepted << " accepted, " << rejected << " rejected ======\n";
     return true;
 }
