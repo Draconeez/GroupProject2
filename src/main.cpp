@@ -93,27 +93,27 @@ int main(int argc, char* argv[]) {
 	connectionsLoad(graph, acceptedBuildings, dataDir);
 
 	int caseNumber = 0;
-	while (caseNumber != 10) {
+	while (caseNumber != 18) {
 		std::cout << "===== Welcome to the Campus Navigation and Facility Analytics System! =====" << std::endl;
 		std::cout << "Select an option from the menu below:" << std::endl;
-		std::cout << " View all facilities\n"
-			<< " Search facility by ID\n"
-			<< " Search facility by name\n" 
-			<< " Search facility by category\n"
-			<< " View campus graph\n"
-			<< " Display graph counts and degrees\n"
-			<< " Find reachable buildings (BFS)\n"
-			<< " Find shortest path (BFS)\n"
-			<< " Add department\n"
-			<< " Search department\n"
-			<< " Display department hierarchy*\n"
-			<< " Preorder traversal**\n"
-			<< " Postorder traversal\n"
-			<< " Level-order traversal\n"
-			<< " Department statistics\n"
-			<< " Facility category report\n"
-			<< " Graph connectivity report\n"
-			<< " Exit\n";
+		std::cout << "1. View all facilities\n"
+			<< "2. Search facility by ID\n"
+			<< "3. Search facility by name\n" 
+			<< "4. Search facility by category\n"
+			<< "5. View campus graph\n"
+			<< "6. Display graph counts and degrees\n"
+			<< "7. Find reachable buildings (BFS)\n"
+			<< "8. Find shortest path (BFS)\n"
+			<< "9. Add department\n"
+			<< "10. Search department\n"
+			<< "11. Display department hierarchy*\n"
+			<< "12. Preorder traversal**\n"
+			<< "13. Postorder traversal\n"
+			<< "14. Level-order traversal\n"
+			<< "15. Department statistics\n"
+			<< "16. Facility category report\n"
+			<< "17. Graph connectivity report\n"
+			<< "18. Exit\n";
 		std::cout << "Enter your choice: ";
 
 		if (!(std::cin >> caseNumber)) { // Get reponse, and clear anything that is not an int 
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
 			std::string invalidInput;
 			std::getline(std::cin, invalidInput);
 			caseNumber = 0;
-			std::cout << "Invalid option. Please enter a number from 1 to 10." << std::endl;
+			std::cout << "Invalid option. Please enter a number from 1 to 18." << std::endl;
 			continue;
 		}
 		std::string remainingInput;
@@ -164,35 +164,6 @@ int main(int argc, char* argv[]) {
 			break;
 		case 7:
 			// Find reachable buildings(BFS) 
-			{
-				std::string userStart;
-				std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
-				std::cout << "Available buildings:" << std::endl;
-				for (const auto& building : acceptedBuildings) {
-					std::cout << building << '\n';
-				}
-				std::cout << "Enter the starting building: ";
-				std::getline(std::cin, userStart);
-
-				const std::string normalizedStart = HashTable::toLower(HashTable::trim(userStart));
-				bool validStart = false;
-				for (const auto& building : acceptedBuildings) {
-					if (HashTable::toLower(building) == normalizedStart) {
-						userStart = building;
-						validStart = true;
-						break;
-					}
-				}
-				if (!validStart) {
-					std::cout << "Error: Please enter a valid building name." << std::endl;
-				} else {
-					for (const auto& destination : acceptedBuildings) {
-						if (destination != userStart) {
-							graph.BFS(userStart, destination);
-						}
-					}
-				}
-			}
 			break;	
 		case 8:
 			// Find shortest path (BFS)
