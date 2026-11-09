@@ -120,6 +120,7 @@ int main(int argc, char* argv[]) {
 		std::string remainingInput;
 		std::getline(std::cin, remainingInput);  // if input is int, it passes through to this 
 		
+		switch(caseNumber)
 		{
 		case 1:
 				// Display all facilities
