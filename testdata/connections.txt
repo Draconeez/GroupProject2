@@ -6,8 +6,9 @@ Student Union|Gym
 Science Building|Engineering Building
 Business Building|Gym
 
-# Rejections: unknown building, exact duplicate, reversed duplicate, and wrong field count
+# Rejections: unknown building, exact duplicate, reversed duplicate, and wrong field count, self connections 
 Library|Space Station
 Library|Student Union
 Student Union|Library
 Library|Gym|Observatory
+Library|Library 
