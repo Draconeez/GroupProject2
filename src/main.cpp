@@ -61,7 +61,7 @@ void buildingsLoad(const std::string& dataDir, std::vector<std::string>& accepte
 
 // opening connections data and loading into campusGraph object
 void connectionsLoad(campusGraph& graph, const std::vector<std::string>& acceptedBuildings, const std::string& dataDir) {
-	graph.loadFromFile(dataDir + "/connections.txt");
+	graph.loadFromFile(dataDir + "/connections.txt", acceptedBuildings);
 }
 
 // Opening departments data
@@ -85,11 +85,10 @@ int main(int argc, char* argv[]) {
 	HashTable facilityTable; // Load the facilities data from the file
 	DepartmentTree deptTree; // Load the department hierarchy from the file
 	std::vector<std::string> acceptedBuildings; // Populate this with the list of accepted buildings
+	campusGraph graph; // Load the campus graph from the connections file
 	buildingsLoad(dataDir, acceptedBuildings);
 	facilitiesLoad(facilityTable, acceptedBuildings, dataDir);
 	departmentsLoad(deptTree, dataDir);
-
-	campusGraph graph;
 	connectionsLoad(graph, acceptedBuildings, dataDir);
 
 	int caseNumber = 0;
@@ -100,7 +99,7 @@ int main(int argc, char* argv[]) {
 			<< "2. Search facility by ID\n"
 			<< "3. Search facility by name\n" 
 			<< "4. Search facility by category\n"
-			<< "5. View campus graph\n"
+			<< "5. View campus graph\n" 
 			<< "6. Display graph counts and degrees\n"
 			<< "7. Find reachable buildings (BFS)\n"
 			<< "8. Find shortest path (BFS)\n"
@@ -155,15 +154,46 @@ int main(int argc, char* argv[]) {
 			// search facility by category
 		}
 		case 5:
-			// View campus graph 
-			graph.displayGraph();
+			// View campus graph - Will Jenkins
+			graph.displayGraph(acceptedBuildings); // Displays connections between buildings in the campus graph -- 
+			// need to pull from buildings.txt and connections.txt!! Otherwise it will omit observatory (and maybe other buildings that don't have eonnections in testing).
 			break;
 		case 6:
 			// Display graph counts and degrees
-			graph.displayCAD();
+			graph.displayCAD(acceptedBuildings);
 			break;
 		case 7:
-			// Find reachable buildings(BFS) 
+			// Find reachable buildings(BFS) -- promts for one building and then shows fastest route to all locations 
+            {
+				/* EXAMPLE 
+				From Library:
+				Library (distance 0)
+				Student Union (distance 1)
+				Business Building (distance 1)
+				Science Building (distance 2)
+				Gym (distance 2)
+				Engineering Building (distance 3)
+				Reachable: 6 of 7 buildings
+
+				From Observatory:
+				Observatory (distance 0)
+				Reachable: 1 of 7 buildings*/
+
+                std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
+                std::cout << " - Available buildings:" << std::endl;
+                for (const auto& building : acceptedBuildings) {
+                    std::cout << building << '\n';
+                } // Lists available buildings 
+				std::cout << "\n";
+
+                std::cout << "Enter the starting building: ";
+				std::string userStart;
+                std::getline(std::cin, userStart); // gets starting building from the user  
+				std::cout << "------------------ \n";
+
+				graph.reachableBFS(userStart, acceptedBuildings);
+			}
+
 			break;	
 		case 8:
 			// Find shortest path (BFS)
@@ -172,7 +202,7 @@ int main(int argc, char* argv[]) {
 		std::string userEnd;
 		std::string line;
 
-		std::cout << "===== Find Reachable Buildings (BFS) =====" << std::endl;
+		std::cout << "===== Find Shortest Path (BFS) =====" << std::endl;
 		std::cout << " - Available buildings: " << std::endl;
 
 		
@@ -186,7 +216,7 @@ int main(int argc, char* argv[]) {
 			std::cout << "What building would you like to end at? (Please enter the building name): ";
 			std::getline(std::cin, userEnd);
 			std::cout << "-------------------------------------------" << std::endl;
-			graph.BFS(userStart, userEnd);
+			graph.BFS(userStart, userEnd, acceptedBuildings);
 		}
 		break;
 		case 9:
@@ -222,7 +252,7 @@ int main(int argc, char* argv[]) {
 			deptTree.displayHierarchy(); // *Display the department tree with each department on a separate line, using four spaces of indentation per depth level.
 			break;
 		case 12:
-		deptTree.displayPreorder(); // **Display the departments in preorder traversal order as a sequence, without indentation.
+			deptTree.displayPreorder(); // **Display the departments in preorder traversal order as a sequence, without indentation.
 			break;
 		case 13: 
 			//  Postorder traversal 
@@ -235,9 +265,26 @@ int main(int argc, char* argv[]) {
 			break;
 		case 16: 
 			// Facility category report: for each distinct category, display facility count and percentage of all accepted facilities (one decimal place). Group category names ignoring capitalization and preserve the spelling of the first accepted category. Display the total count. If no facilities exist, state that none are available and show total zero; never divide by zero.
+			/*
+			Facility category report (Final) -- EXAMPLE
+				Category				Count		Percentage
+				Library					2			20.0%
+				Tutoring Center			1			10.0%
+				Student Services Office	1			10.0%
+				Computer Lab			2			20.0%
+				Classroom				3			30.0%
+				Recreation				1			10.0%
+				Total					10			100.0%
+			*/
 			break;
 		case 17:
 			// Graph connectivity report: display total buildings, total connections, every building tied for highest degree, isolated buildings (or None), and the number of connected components. If there are no buildings, display a clear message with zero totals.
+			// Graph connectivity report (Final) -- EXAMPLE
+			// Total buildings: 
+			// Total connections: 6
+			// Highest degree (3): Student Union
+			// Isolated buildings: Observatory
+			// Connected components: 
 			break;
 		case 18:
 			// Exit
