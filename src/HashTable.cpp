@@ -5,6 +5,7 @@
 #include <cctype>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 //Initializes an empty separate-chaining hash table with the given capacity 
 HashTable::HashTable(int initialCapacity) {
@@ -352,4 +353,141 @@ void HashTable::searchAndPrintById(const std::string& rawInput) const {
     std::cout << "====== Found: " << found->getFacilityName() << " | "
               << found->getFacilityBuilding() << " | "
               << found->getFacilityCategory() << " ======\n";
+}
+
+std::vector<Facility> HashTable::searchByName(const std::string& rawQuery) const {
+    std::vector<Facility> matches;
+    std::string needle = toLower(trim(rawQuery));
+
+    if (needle.empty()) {
+        return matches;
+    }
+
+    for (size_t i = 0; i < fileOrderFacilities.size(); ++i) {
+        std::string facNameLower = toLower(fileOrderFacilities[i].getFacilityName());
+        if (facNameLower.find(needle) != std::string::npos) {
+            matches.push_back(fileOrderFacilities[i]);
+        }
+    }
+
+    return matches;
+}
+
+// Validates name query, searches facilities, and prints results
+void HashTable::searchAndPrintByName(const std::string& rawQuery) const {
+    std::string cleaned = trim(rawQuery);
+    if (cleaned.empty()) {
+        std::cout << "====== Error: Facility name cannot be blank. ======" << std::endl;
+        return;
+    }
+
+    if (entryCount == 0) {
+        std::cout << "====== No facilities are loaded. ======" << std::endl;
+        return;
+    }
+
+    std::vector<Facility> matches = searchByName(cleaned);
+    if (matches.empty()) {
+        std::cout << "====== Not found: no facility matching name '" << cleaned << "' ======" << std::endl;
+        return;
+    }
+
+    std::cout << "====== Found " << matches.size() << " facility match(es) for '"<< cleaned << "' ======" << std::endl;
+    for (size_t i = 0; i < matches.size(); ++i) {
+        matches[i].DisplayFacilityInfo();
+    }
+}
+
+// Searches accepted facilities by case-insensitive exact category match (file order)
+std::vector<Facility> HashTable::searchByCategory(const std::string& rawCat) const {
+    std::vector<Facility> matches;
+    std::string targetLower = toLower(trim(rawCat));
+
+    if (targetLower.empty()) {
+        return matches;
+    }
+
+    for (size_t i = 0; i < fileOrderFacilities.size(); ++i) {
+        std::string facCatLower = toLower(fileOrderFacilities[i].getFacilityCategory());
+        if (facCatLower == targetLower) {
+            matches.push_back(fileOrderFacilities[i]);
+        }
+    }
+
+    return matches;
+}
+
+// Validates category query, searches facilities, and prints results
+void HashTable::searchAndPrintByCategory(const std::string& rawCat) const {
+    std::string cleaned = trim(rawCat);
+    if (cleaned.empty()) {
+        std::cout << "====== Error: Facility category cannot be blank. ======" << std::endl;
+        return;
+    }
+
+    if (entryCount == 0) {
+        std::cout << "====== No facilities are loaded. ======" << std::endl;
+        return;
+    }
+
+    std::vector<Facility> matches = searchByCategory(cleaned);
+    if (matches.empty()) {
+        std::cout << "====== Not found: no facilities in category '" << cleaned << "' ======" << std::endl;
+        return;
+    }
+
+    std::cout << "====== Found " << matches.size() << " facility match(es) in category '"
+              << matches[0].getFacilityCategory() << "' ======" << std::endl;
+    for (size_t i = 0; i < matches.size(); ++i) {
+        matches[i].DisplayFacilityInfo();
+    }
+}
+
+// Displays count and percentage per distinct category using first-accepted spelling
+void HashTable::displayCategoryReport() const {
+    std::cout << "====== Facility Category Report ======" << std::endl;
+
+    if (entryCount == 0 || canonCategories.empty()) {
+        std::cout << "No facilities are available."<<std::endl;
+        std::cout << "Total: 0" << std::endl;
+        return;
+    }
+
+    // Tally counts in the exact order categories were first accepted
+    std::vector<int> counts(canonCategories.size(), 0);
+    for (size_t i = 0; i < fileOrderFacilities.size(); ++i) {
+        std::string catLower = toLower(fileOrderFacilities[i].getFacilityCategory());
+        for (size_t c = 0; c < canonCategories.size(); ++c) {
+            if (toLower(canonCategories[c]) == catLower) {
+                counts[c]++;
+                break;
+            }
+        }
+    }
+
+    // Dynamic first-column width so long category names stay aligned
+    size_t nameWidth = 12;
+    for (size_t c = 0; c < canonCategories.size(); ++c) {
+        if (canonCategories[c].length() + 4 > nameWidth) {
+            nameWidth = canonCategories[c].length() + 4;
+        }
+    }
+
+    std::cout << std::left << std::setw(static_cast<int>(nameWidth)) << "Category"
+              << std::right << std::setw(8) << "Count"
+              << std::setw(14) << "Percentage" << std::endl;
+
+    std::cout << std::fixed << std::setprecision(1);
+    for (size_t c = 0; c < canonCategories.size(); ++c) {
+        double pct = (static_cast<double>(counts[c]) / static_cast<double>(entryCount)) * 100.0;
+        std::cout << std::left << std::setw(static_cast<int>(nameWidth)) << canonCategories[c]
+                  << std::right << std::setw(8) << counts[c]
+                  << std::setw(13) << pct << "%" << std::endl;
+    }
+
+    std::cout << std::left << std::setw(static_cast<int>(nameWidth)) << "Total"
+              << std::right << std::setw(8) << entryCount
+              << std::setw(13) << 100.0 << "%"<< std::endl;
+
+    std::cout.unsetf(std::ios::floatfield);
 }
