@@ -236,13 +236,15 @@ whj0018@cell15-cse:~/GroupProject2$
 === Member C (Ujjwol KC) - DepartmentTree Test Results ===
 
 1. File Loading & Validation (Startup)
-- Input File: data/departments.txt
+- Input: data/departments.txt
+- Expected Output: Valid department hierarchy loaded cleanly with 0 rejected entries.
 - Actual Output:
   data/departments.txt: 7 accepted, 0 rejected
 - Result: PASS (Validates delimiter parsing and initial tree construction)
 
 2. Display Initial Department Hierarchy (Menu Option 8)
 - Input: 8
+- Expected Output: Indented tree showing University -> colleges -> departments.
 - Actual Output:
   University
       College of Engineering
@@ -255,6 +257,7 @@ whj0018@cell15-cse:~/GroupProject2$
 
 3. Preorder Traversal (Menu Option 9)
 - Input: 9
+- Expected Output: Root printed first, followed by each subtree in preorder.
 - Actual Output:
   University
   College of Engineering
@@ -267,6 +270,7 @@ whj0018@cell15-cse:~/GroupProject2$
 
 4. Case-Insensitive Search - Existing Department (Menu Option 7)
 - Input: 7 -> cOmPuTeR sCiEnCe
+- Expected Output: Finds Computer Science and prints its parent, child count, and depth.
 - Actual Output:
   Department Name: Computer Science
   Parent: College of Engineering
@@ -276,13 +280,15 @@ whj0018@cell15-cse:~/GroupProject2$
 
 5. Search - Non-Existent Department Edge Case (Menu Option 7)
 - Input: 7 -> Astronomy
+- Expected Output: Reports that the department was not found without crashing.
 - Actual Output:
   Department 'Astronomy' not found.
 - Result: PASS (Handles missing department safely without crashing)
 
 6. Add Department - Valid Insertion (Menu Option 6)
-- Input: 6 -> Department: Cybersecurity | Parent: Computer Science
-- Follow-up Verification (Menu Option 8):
+- Input: 6 -> Department: Cybersecurity | Parent: Computer Science (verified with Option 8)
+- Expected Output: Cybersecurity is added under Computer Science at Depth 3.
+- Actual Output:
   University
       College of Engineering
           Computer Science
@@ -295,12 +301,14 @@ whj0018@cell15-cse:~/GroupProject2$
 
 7. Add Department - Case-Insensitive Duplicate Edge Case (Menu Option 6)
 - Input: 6 -> Department: cybersecurity | Parent: College of Engineering
+- Expected Output: Rejects duplicate department name and leaves the tree unchanged.
 - Actual Output:
   Error: Department 'cybersecurity' already exists.
 - Result: PASS (Rejects duplicate department name regardless of capitalization)
 
 8. Add Department - Non-Existent Parent Edge Case (Menu Option 6)
 - Input: 6 -> Department: Robotics | Parent: School of Medicine
+- Expected Output: Rejects insertion because the parent department does not exist.
 - Actual Output:
   Error: Parent department 'School of Medicine' not found.
 - Result: PASS (Rejects insertion when specified parent node does not exist)

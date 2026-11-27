@@ -99,3 +99,35 @@ and traverses the linked list at table[index] to check for duplicate IDs.
 
 Under capacity = 17, "F001" and "F014" both hash to bucket index 11, and "F002"
 and "F015" both hash to bucket index 12, which is demonstrated in testdata/.
+
+3. DEPARTMENT HIERARCHY TREE DESIGN (DepartmentNode & DepartmentTree)
+
+Tree Structure & Node Representation
+Each DepartmentNode stores a department name, a pointer to its parent node
+(nullptr for the root, "University"), and a std::vector<DepartmentNode*> of
+child pointers. Using a general tree with a child vector supports arbitrary
+branching factors—such as multiple colleges under the root and multiple
+departments under each college—without assuming a fixed number of children per
+node.
+
+Input Normalization & Validation Rules
+Before inserting or searching for a department name, input strings are trimmed
+of leading/trailing whitespace and compared case-insensitively so variations
+like "cOmPuTeR sCiEnCe" or "cybersecurity" match reliably.
+- File Loading (departments.txt): Validates pipe-delimited fields and rejects
+  malformed lines, duplicate department names, or entries whose parent cannot
+  be resolved in the tree.
+- Runtime Insertion (Option 6): Rejects duplicate department names and rejects
+  insertions when the specified parent department does not exist, preserving
+  tree integrity.
+
+Traversal, Search & Memory Management
+- Search (Option 7): Traverses the tree to locate the matching department and
+  reports its canonical name, parent name, direct child count, and depth.
+- Hierarchy Display (Option 8): Prints departments with indentation reflecting
+  each node's depth in the hierarchy.
+- Preorder Traversal (Option 9): Visits each node before recursively visiting
+  its children.
+- Cleanup (~DepartmentTree / destroyTree): Uses recursive post-order traversal
+  so child nodes are deleted before their parent node, preventing dangling
+  pointers and memory leaks on exit.

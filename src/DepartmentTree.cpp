@@ -1,7 +1,7 @@
 /*
-* Author: Ujjwol KC
-* Purpose: Manages the binary tree data structure for departments, 
-*          handling file loading, case-insensitive searches, and hierarchy display.
+- Author: Ujjwol KC
+- Purpose: Implements the department general tree operations, including
+-          input validation, case-insensitive search, traversal, and cleanup.
 */
 #include "../include/DepartmentTree.h"
 #include <iostream>
@@ -20,24 +20,28 @@ DepartmentTree::~DepartmentTree() {
 }
 
 void DepartmentTree::destroyTree(DepartmentNode* node) {
-    if (node == nullptr) return; 
-    for (int i = 0; i < node->children.size(); i++) {
+    if (node == nullptr) return;
+    // Delete all children before deleting the current node so child pointers
+    // are never dereferenced after their parent is freed (post-order cleanup).
+    for (size_t i = 0; i < node->children.size(); i++) {
         destroyTree(node->children[i]);
     }
-    delete node; 
+    delete node;
 }
 
 string DepartmentTree::trimWhitespace(const string& str) {
+    // Strip spaces, tabs, and line endings (including '\r' from Windows/CRLF files)
     size_t p1 = str.find_first_not_of(" \t\r\n");
-    if (p1 == string::npos) return ""; 
+    if (p1 == string::npos) return "";
     size_t p2 = str.find_last_not_of(" \t\r\n");
     return str.substr(p1, p2 - p1 + 1);
 }
 
 string DepartmentTree::toLowerCase(const string& str) {
     string result = str;
+    // Cast to unsigned char before tolower to avoid undefined behavior on negative char values
     for (char& c : result) {
-        c = tolower(c);
+        c = static_cast<char>(tolower(static_cast<unsigned char>(c)));
     }
     return result;
 }
@@ -45,18 +49,19 @@ string DepartmentTree::toLowerCase(const string& str) {
 DepartmentNode* DepartmentTree::findNode(DepartmentNode* node, const string& name) {
     if (node == nullptr) return nullptr;
 
+    // Compare normalized names so searches and duplicate checks ignore capitalization
     if (toLowerCase(node->name) == toLowerCase(name)) {
         return node;
     }
 
-    for (int i = 0; i < node->children.size(); i++) {
+    for (size_t i = 0; i < node->children.size(); i++) {
         DepartmentNode* found = findNode(node->children[i], name);
         if (found != nullptr) {
-            return found; 
+            return found;
         }
     }
 
-    return nullptr; 
+    return nullptr;
 }
 
 bool DepartmentTree::addDepartment(const string& name, const string& parentName) {
@@ -68,17 +73,20 @@ bool DepartmentTree::addDepartment(const string& name, const string& parentName)
         return false;
     }
 
+    // First department in an empty tree becomes the root node
     if (root == nullptr) {
         root = new DepartmentNode(cleanName);
         totalDepartments++;
         return true;
     }
 
+    // Reject duplicates so department names stay unique across the hierarchy
     if (findNode(root, cleanName) != nullptr) {
         cout << "====== Error: Department '" << cleanName << "' already exists. ======\n";
         return false;
     }
 
+    // Require a valid existing parent so no orphaned department nodes are created
     DepartmentNode* parentNode = findNode(root, cleanParent);
     if (parentNode == nullptr) {
         cout << "====== Error: Parent department '" << cleanParent << "' not found. ======\n";
@@ -101,11 +109,12 @@ void DepartmentTree::searchDepartment(const string& targetName) {
         return;
     }
 
+    // Walk upward through parent pointers to compute depth without storing extra state
     int depth = 0;
     DepartmentNode* temp = target;
     while (temp->parent != nullptr) {
         depth++;
-        temp = temp->parent; 
+        temp = temp->parent;
     }
 
     cout << "Department Name: " << target->name << "\n";
@@ -120,11 +129,12 @@ void DepartmentTree::searchDepartment(const string& targetName) {
 
 void DepartmentTree::printHierarchy(DepartmentNode* node, int depth) {
     if (node == nullptr) return;
+    // Indent 4 spaces per depth level to visually show tree nesting
     for (int i = 0; i < depth; i++) {
-        cout << "    "; 
+        cout << "    ";
     }
     cout << node->name << "\n";
-    for (int i = 0; i < node->children.size(); i++) {
+    for (size_t i = 0; i < node->children.size(); i++) {
         printHierarchy(node->children[i], depth + 1);
     }
 }
@@ -139,8 +149,9 @@ void DepartmentTree::displayHierarchy() {
 
 void DepartmentTree::printPreorder(DepartmentNode* node) {
     if (node == nullptr) return;
-    cout << node->name << "\n"; 
-    for (int i = 0; i < node->children.size(); i++) {
+    // Visit parent before children to produce a standard preorder traversal
+    cout << node->name << "\n";
+    for (size_t i = 0; i < node->children.size(); i++) {
         printPreorder(node->children[i]);
     }
 }
@@ -160,7 +171,7 @@ bool DepartmentTree::loadFromFile(const string& filename) {
 
     if (!file.is_open()) {
         cout << "====== Error: Cannot open file " << filename << " ======\n";
-        cout << filename << ": " << accepted << " accepted, " << rejected << " rejected \n"; // removed lines to match 
+        cout << filename << ": " << accepted << " accepted, " << rejected << " rejected \n";
         return false;
     }
 
@@ -170,10 +181,12 @@ bool DepartmentTree::loadFromFile(const string& filename) {
     while (getline(file, line)) {
         lineNumber++;
         
+        // Skip blank lines and '#' comment lines so data files remain readable
         size_t firstChar = line.find_first_not_of(" \t\r\n");
-        if (firstChar == string::npos) continue; 
-        if (line[firstChar] == '#') continue; 
+        if (firstChar == string::npos) continue;
+        if (line[firstChar] == '#') continue;
         
+        // Expect exactly one '|' separator between department name and parent name
         size_t delimPos1 = line.find_first_of('|');
         size_t delimPos2 = line.find_last_of('|');
         
@@ -192,6 +205,7 @@ bool DepartmentTree::loadFromFile(const string& filename) {
             continue;
         }
 
+        // The first valid entry must specify NONE as its parent to establish the root
         if (root == nullptr) {
             if (toLowerCase(parentName) == "none") {
                 root = new DepartmentNode(deptName);
