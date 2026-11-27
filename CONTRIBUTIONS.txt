@@ -6,8 +6,12 @@
 - Hashtable Class (Separate Chaining)
 - Hash function, collision counting, dupe ID rejection
 - File loading, testing, validation, warning reporting
-- Menu Option 1 and 2
-
+- Menu Option 1, 2, 3, 16
+Reflection: 
+For the Smart Campus Navigation and Facility Analytics System, I designed and built Member A's C++ modules, including facility record management, a custom separate-chaining hash table, ID lookup, case-insensitive name and category search, category analytics reporting, and main.cpp integration. 
+During integration, I reviewed Will's Facility code to implement pointer compatibility, correct input validation, and clean interaction with the main menu. 
+One specific bug I identified and fixed was an input buffer issue where leftover newline characters after numeric menu selections caused subsequent getline calls for facility names and categories to be skipped; flushing the stream buffer resolved the skipped prompts. 
+Testing and refining bucket-chain traversal alongside these menu fixes kept facility searches and category analytics accurate even when hash collisions occurred.
 
 
 == Member B - Will ==
@@ -22,3 +26,5 @@
 - Built the file loading logic with strict delimiter validation.
 - Implemented case-insensitive tree searches and duplicate detection.
 - Managed dynamic memory and the Rule of Three to prevent memory leaks.
+
+== Code Review ==
