@@ -148,10 +148,20 @@ int main(int argc, char* argv[]) {
 		case 3:
 		{
 			// search facility by name
+			std::cout << "Enter facility name: ";
+			std::string rawName;
+			std::getline(std::cin, rawName);
+			facilityTable.searchAndPrintByName(rawName);
+			break;
 		}
 		case 4:
 		{
 			// search facility by category
+			std::cout << "Enter facility category: ";
+			std::string rawCategory;
+			std::getline(std::cin, rawCategory);
+			facilityTable.searchAndPrintByCategory(rawCategory);
+			break;
 		}
 		case 5:
 			// View campus graph - Will Jenkins
@@ -265,17 +275,7 @@ int main(int argc, char* argv[]) {
 			break;
 		case 16: 
 			// Facility category report: for each distinct category, display facility count and percentage of all accepted facilities (one decimal place). Group category names ignoring capitalization and preserve the spelling of the first accepted category. Display the total count. If no facilities exist, state that none are available and show total zero; never divide by zero.
-			/*
-			Facility category report (Final) -- EXAMPLE
-				Category				Count		Percentage
-				Library					2			20.0%
-				Tutoring Center			1			10.0%
-				Student Services Office	1			10.0%
-				Computer Lab			2			20.0%
-				Classroom				3			30.0%
-				Recreation				1			10.0%
-				Total					10			100.0%
-			*/
+			facilityTable.displayCategoryReport();
 			break;
 		case 17:
 			// Graph connectivity report: display total buildings, total connections, every building tied for highest degree, isolated buildings (or None), and the number of connected components. If there are no buildings, display a clear message with zero totals.

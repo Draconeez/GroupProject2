@@ -38,7 +38,14 @@ public:
 
     // Search facility by ID and print its details
     void searchAndPrintById(const std::string& rawInput) const;
+    std::vector<Facility> searchByName(const std::string& rawQuery) const;
+    void searchAndPrintByName(const std::string& rawQuery) const;
 
+    // Search facility by category and print its details
+    std::vector<Facility> searchByCategory(const std::string& rawCat) const;
+    void searchAndPrintByCategory(const std::string& rawCat) const;
+
+    void displayCategoryReport() const;
     // Getters for hash table statistics and file order facilities
     int getCapacity() const { return capacity; }
     int getEntryCount() const { return entryCount; }
